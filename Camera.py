@@ -7,7 +7,12 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+import cv2
+import threading
 
+    
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -56,10 +61,41 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.flag = 0
+        self.th = threading.Thread(target=self.run)
+        self.th.daemon = True
+        
+        
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.lbl_title.setText(_translate("MainWindow", "MathTeacher"))
+
+    def run(self):
+        self.cap = cv2.VideoCapture(0)
+        while True:
+            self.ret, self.frame = self.cap.read()
+            if self.ret:
+                self.rgbImage = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
+                self.convertToQtFormat = QImage(self.rgbImage.data, self.rgbImage.shape[1], self.rgbImage.shape[0], QImage.Format_RGB888)
+               
+                self.pixmap = QPixmap(self.convertToQtFormat)
+                self.p = self.pixmap.scaled(790, 420, QtCore.Qt.IgnoreAspectRatio)
+
+                self.lbl_frame.setPixmap(self.p)
+                self.lbl_frame.update()
+            if self.flag:
+                break
+                
+
+    def stop_(self):
+        print("stop!")
+        self.cap.release()
+        self.flag = 1
+
+    def capture(self):
+        cv2.imwrite("tempImg.jpg", self.frame)
 
 
 import back_arrow_rc

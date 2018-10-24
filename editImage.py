@@ -8,8 +8,12 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from PyQt5.QtWidgets import QMainWindow
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        MainWindow.setMouseTracking(True)
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 480)
         MainWindow.setStyleSheet("background-color: rgb(0, 0, 0);")
@@ -41,12 +45,23 @@ class Ui_MainWindow(object):
         self.lbl_frame.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.lbl_frame.setText("")
         self.lbl_frame.setObjectName("lbl_frame")
+        self.lbl_frame.setMouseTracking(True)
         self.btn_next = QtWidgets.QPushButton(self.centralwidget)
         self.btn_next.setGeometry(QtCore.QRect(750, 390, 49, 49))
         self.btn_next.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
 "border-image: url(:/icon/next.png);")
         self.btn_next.setText("")
         self.btn_next.setObjectName("btn_next")
+        self.btn_pen = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_pen.setGeometry(QtCore.QRect(600,0,49,49))
+        self.btn_pen.setStyleSheet("background-color: rgba(100, 178, 244, 255);\n"
+            "font: 75 12pt \"Arial\";")
+        self.btn_pen.setText("Pen")
+        self.btn_erase = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_erase.setGeometry(QtCore.QRect(650,0,49,49))
+        self.btn_erase.setStyleSheet("background-color: rgba(100, 178, 244, 255);\n"
+            "font: 75 10pt \"Arial\";")
+        self.btn_erase.setText("Erase")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
