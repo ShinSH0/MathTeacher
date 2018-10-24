@@ -9,9 +9,11 @@ from functools import partial
 class MyWindow(QtWidgets.QMainWindow):
 	def __init__(self):
 		super().__init__()
+		# 마우스 이벤트 등록
 		self.mousePressEvent = self.onClick
 		self.mouseReleaseEvent = self.onRelease
 		self.mouseMoveEvent = self.onMove
+
 		self.Toggle = 0
 		self.paint = 0
 		self.frame = QtWidgets.QLabel()
@@ -21,6 +23,14 @@ class MyWindow(QtWidgets.QMainWindow):
 		self.bx = -10
 		self.by = -10
 		self.mode = 0
+
+		# Toggle : 마우스 클릭 플래그
+		# paint : 그림판 화면 (들어왔는지 여부) 플래그
+		# frame : 그림판 프레임 저장 (다른 클래스에 있기 때문에 가져와야 됨)
+		# pixmap : 그림판 그린 그림을 저장할 곳
+		# x, y : 마우스 좌표
+		# bx, by : 이전의 마우스 좌표
+		# mode : 펜 상태 플래그 (펜, 지우개)
 
 
 	# 마우스 클릭 이벤트
