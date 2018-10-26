@@ -53,10 +53,14 @@ class Ui_MainWindow(object):
 "image: url(:/icon/photo-camera.png);")
         self.lbl_cam.setText("")
         self.lbl_cam.setObjectName("lbl_cam")
+        self.btn_next = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_next.setGeometry(QtCore.QRect(750, 390, 49, 49))
+        self.btn_next.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
+"border-image: url(:/icon/next.png);")
+        self.btn_next.setText("")
+        self.btn_next.setObjectName("btn_next")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -64,8 +68,6 @@ class Ui_MainWindow(object):
         self.flag = 0
         self.th = threading.Thread(target=self.run)
         self.th.daemon = True
-        
-        
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -86,16 +88,17 @@ class Ui_MainWindow(object):
                 self.lbl_frame.setPixmap(self.p)
                 self.lbl_frame.update()
             if self.flag:
+                self.cap.release()
                 break
                 
 
     def stop_(self):
-        print("stop!")
-        self.cap.release()
         self.flag = 1
 
     def capture(self):
         cv2.imwrite("tempImg.jpg", self.frame)
+
+
 
 
 import back_arrow_rc

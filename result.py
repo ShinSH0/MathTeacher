@@ -24,12 +24,6 @@ class Ui_MainWindow(object):
         self.lbl_title.setTextFormat(QtCore.Qt.PlainText)
         self.lbl_title.setAlignment(QtCore.Qt.AlignCenter)
         self.lbl_title.setObjectName("lbl_title")
-        self.btn_back = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_back.setGeometry(QtCore.QRect(1, 1, 49, 49))
-        self.btn_back.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/icon/back_arrow.png);")
-        self.btn_back.setText("")
-        self.btn_back.setObjectName("btn_back")
         self.lbl_edit = QtWidgets.QLabel(self.centralwidget)
         self.lbl_edit.setGeometry(QtCore.QRect(745, 1, 49, 49))
         self.lbl_edit.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
@@ -42,15 +36,20 @@ class Ui_MainWindow(object):
         self.lbl_frame.setText("")
         self.lbl_frame.setObjectName("lbl_frame")
         self.btn_next = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_next.setGeometry(QtCore.QRect(740, 400, 49, 49))
+        self.btn_next.setGeometry(QtCore.QRect(745, 1, 49, 49))
         self.btn_next.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
 "border-image: url(:/icon/home.png);")
         self.btn_next.setText("")
         self.btn_next.setObjectName("btn_next")
+
+        self.btn_next2 = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_next2.setGeometry(QtCore.QRect(750, 390, 49, 49))
+        self.btn_next2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
+"border-image: url(:/icon/next.png);")
+        self.btn_next2.setText("")
+        self.btn_next2.setObjectName("btn_next2")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
