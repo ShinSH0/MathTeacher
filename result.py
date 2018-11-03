@@ -24,12 +24,6 @@ class Ui_MainWindow(object):
         self.lbl_title.setTextFormat(QtCore.Qt.PlainText)
         self.lbl_title.setAlignment(QtCore.Qt.AlignCenter)
         self.lbl_title.setObjectName("lbl_title")
-        self.lbl_edit = QtWidgets.QLabel(self.centralwidget)
-        self.lbl_edit.setGeometry(QtCore.QRect(745, 1, 49, 49))
-        self.lbl_edit.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/icon/solve.png);")
-        self.lbl_edit.setText("")
-        self.lbl_edit.setObjectName("lbl_edit")
         self.lbl_frame = QtWidgets.QLabel(self.centralwidget)
         self.lbl_frame.setGeometry(QtCore.QRect(5, 55, 790, 420))
         self.lbl_frame.setStyleSheet("background-color: rgb(255, 255, 255);")

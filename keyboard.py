@@ -8,9 +8,44 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from functools import partial
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
+import math
+import MTlist
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+
+        self.folders = [
+        'Accent', 'Array', 'Arrow', 'Brace' ,'Escaped', 'Greek', 'Integral', 
+        'Log Limit', 'Operator', 'Relational', 'Root Fraction', 'Space', 'Subscript', 
+        'Sum', 'Symbol','Triangle Function']
+
+        self.lens = {
+        'Accent' : 5,
+        'Array' : 1,
+        'Arrow' : 7,
+        'Brace' : 8,
+        'Escaped' : 10,
+        'Greek' : 29,
+        'Integral' : 12,
+        'Log Limit' : 6,
+        'Operator' : 17,
+        'Relational' : 21,
+        'Root Fraction' : 4,
+        'Space' : 6,
+        'Subscript' : 4,
+        'Sum' : 12,
+        'Symbol' : 15,
+        'Triangle Function' : 6
+        }
+
+        self.panels = []
+        self.buttons = []
+        self.page = 0
+
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 480)
         MainWindow.setStyleSheet("background-color: rgb(0, 0, 0);")
@@ -52,560 +87,175 @@ class Ui_MainWindow(object):
         self.text_equation.setGeometry(QtCore.QRect(10, 230, 581, 221))
         self.text_equation.setStyleSheet("background-color: rgb(250, 250, 250);")
         self.text_equation.setObjectName("text_equation")
-        self.btn_op1 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op1.setGeometry(QtCore.QRect(10, 60, 75, 75))
-        self.btn_op1.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op1.PNG);")
-        self.btn_op1.setText("")
-        self.btn_op1.setObjectName("btn_op1")
-        self.panel_op1 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op1.setEnabled(True)
-        self.panel_op1.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op1.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op1.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op1.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op1.setObjectName("panel_op1")
-        self.selection = QtWidgets.QLabel(self.panel_op1)
-        self.selection.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection.setText("")
-        self.selection.setObjectName("selection")
-        self.btn_1_1 = QtWidgets.QPushButton(self.panel_op1)
-        self.btn_1_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_1_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op1.PNG);")
-        self.btn_1_1.setText("")
-        self.btn_1_1.setObjectName("btn_1_1")
-        self.btn_1_2 = QtWidgets.QPushButton(self.panel_op1)
-        self.btn_1_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_1_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op1_2.PNG);")
-        self.btn_1_2.setText("")
-        self.btn_1_2.setObjectName("btn_1_2")
-        self.btn_op2 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op2.setGeometry(QtCore.QRect(90, 60, 75, 75))
-        self.btn_op2.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op2.PNG);")
-        self.btn_op2.setText("")
-        self.btn_op2.setObjectName("btn_op2")
-        self.btn_op3 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op3.setGeometry(QtCore.QRect(170, 60, 75, 75))
-        self.btn_op3.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op3.PNG);")
-        self.btn_op3.setText("")
-        self.btn_op3.setObjectName("btn_op3")
-        self.btn_op4 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op4.setGeometry(QtCore.QRect(250, 60, 75, 75))
-        self.btn_op4.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op4.PNG);")
-        self.btn_op4.setText("")
-        self.btn_op4.setObjectName("btn_op4")
-        self.btn_op5 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op5.setGeometry(QtCore.QRect(330, 60, 75, 75))
-        self.btn_op5.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op5.PNG);")
-        self.btn_op5.setText("")
-        self.btn_op5.setObjectName("btn_op5")
-        self.btn_op6 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op6.setGeometry(QtCore.QRect(410, 60, 75, 75))
-        self.btn_op6.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op6.PNG);")
-        self.btn_op6.setText("")
-        self.btn_op6.setObjectName("btn_op6")
-        self.btn_op7 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op7.setGeometry(QtCore.QRect(490, 60, 75, 75))
-        self.btn_op7.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op7.PNG);")
-        self.btn_op7.setText("")
-        self.btn_op7.setObjectName("btn_op7")
-        self.btn_op8 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op8.setGeometry(QtCore.QRect(10, 140, 75, 75))
-        self.btn_op8.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op8.PNG);")
-        self.btn_op8.setText("")
-        self.btn_op8.setObjectName("btn_op8")
-        self.btn_op9 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op9.setGeometry(QtCore.QRect(90, 140, 75, 75))
-        self.btn_op9.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op9.PNG);")
-        self.btn_op9.setText("")
-        self.btn_op9.setObjectName("btn_op9")
-        self.btn_op10 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op10.setGeometry(QtCore.QRect(170, 140, 75, 75))
-        self.btn_op10.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op10.PNG);")
-        self.btn_op10.setText("")
-        self.btn_op10.setObjectName("btn_op10")
-        self.btn_op11 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_op11.setGeometry(QtCore.QRect(250, 140, 75, 75))
-        self.btn_op11.setStyleSheet("background-color: rgba(250, 250, 250, 0);\n"
-"image: url(:/op/op11.PNG);")
-        self.btn_op11.setText("")
-        self.btn_op11.setObjectName("btn_op11")
-        self.panel_op2 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op2.setEnabled(True)
-        self.panel_op2.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op2.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op2.setObjectName("panel_op2")
-        self.selection_2 = QtWidgets.QLabel(self.panel_op2)
-        self.selection_2.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_2.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_2.setText("")
-        self.selection_2.setObjectName("selection_2")
-        self.btn_2_1 = QtWidgets.QPushButton(self.panel_op2)
-        self.btn_2_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_2_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op2.PNG);")
-        self.btn_2_1.setText("")
-        self.btn_2_1.setObjectName("btn_2_1")
-        self.btn_2_2 = QtWidgets.QPushButton(self.panel_op2)
-        self.btn_2_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_2_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op2_2.PNG);")
-        self.btn_2_2.setText("")
-        self.btn_2_2.setObjectName("btn_2_2")
-        self.panel_op3 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op3.setEnabled(True)
-        self.panel_op3.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op3.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op3.setObjectName("panel_op3")
-        self.selection_4 = QtWidgets.QLabel(self.panel_op3)
-        self.selection_4.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_4.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_4.setText("")
-        self.selection_4.setObjectName("selection_4")
-        self.btn_3_1 = QtWidgets.QPushButton(self.panel_op3)
-        self.btn_3_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_3_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op3.PNG);")
-        self.btn_3_1.setText("")
-        self.btn_3_1.setObjectName("btn_3_1")
-        self.panel_op4 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op4.setEnabled(True)
-        self.panel_op4.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op4.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op4.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op4.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op4.setObjectName("panel_op4")
-        self.selection_5 = QtWidgets.QLabel(self.panel_op4)
-        self.selection_5.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_5.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_5.setText("")
-        self.selection_5.setObjectName("selection_5")
-        self.btn_4_1 = QtWidgets.QPushButton(self.panel_op4)
-        self.btn_4_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_4_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op4.PNG);")
-        self.btn_4_1.setText("")
-        self.btn_4_1.setObjectName("btn_4_1")
-        self.btn_4_2 = QtWidgets.QPushButton(self.panel_op4)
-        self.btn_4_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_4_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op4_2.PNG);")
-        self.btn_4_2.setText("")
-        self.btn_4_2.setObjectName("btn_4_2")
-        self.btn_4_3 = QtWidgets.QPushButton(self.panel_op4)
-        self.btn_4_3.setGeometry(QtCore.QRect(5, 60, 85, 50))
-        self.btn_4_3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op4_3.PNG);")
-        self.btn_4_3.setText("")
-        self.btn_4_3.setObjectName("btn_4_3")
-        self.btn_4_4 = QtWidgets.QPushButton(self.panel_op4)
-        self.btn_4_4.setGeometry(QtCore.QRect(95, 60, 85, 50))
-        self.btn_4_4.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op4_4.PNG);")
-        self.btn_4_4.setText("")
-        self.btn_4_4.setObjectName("btn_4_4")
-        self.btn_4_5 = QtWidgets.QPushButton(self.panel_op4)
-        self.btn_4_5.setGeometry(QtCore.QRect(5, 120, 85, 50))
-        self.btn_4_5.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op4_5.PNG);")
-        self.btn_4_5.setText("")
-        self.btn_4_5.setObjectName("btn_4_5")
-        self.btn_4_6 = QtWidgets.QPushButton(self.panel_op4)
-        self.btn_4_6.setGeometry(QtCore.QRect(95, 120, 85, 50))
-        self.btn_4_6.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op4_6.PNG);")
-        self.btn_4_6.setText("")
-        self.btn_4_6.setObjectName("btn_4_6")
-        self.panel_op5 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op5.setEnabled(True)
-        self.panel_op5.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op5.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op5.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op5.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op5.setObjectName("panel_op5")
-        self.selection_7 = QtWidgets.QLabel(self.panel_op5)
-        self.selection_7.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_7.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_7.setText("")
-        self.selection_7.setObjectName("selection_7")
-        self.btn_5_1 = QtWidgets.QPushButton(self.panel_op5)
-        self.btn_5_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_5_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op5.PNG);")
-        self.btn_5_1.setText("")
-        self.btn_5_1.setObjectName("btn_5_1")
-        self.btn_5_2 = QtWidgets.QPushButton(self.panel_op5)
-        self.btn_5_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_5_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op5_2.PNG);")
-        self.btn_5_2.setText("")
-        self.btn_5_2.setObjectName("btn_5_2")
-        self.btn_5_3 = QtWidgets.QPushButton(self.panel_op5)
-        self.btn_5_3.setGeometry(QtCore.QRect(5, 60, 85, 50))
-        self.btn_5_3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op5_3.PNG);")
-        self.btn_5_3.setText("")
-        self.btn_5_3.setObjectName("btn_5_3")
-        self.btn_5_4 = QtWidgets.QPushButton(self.panel_op5)
-        self.btn_5_4.setGeometry(QtCore.QRect(95, 60, 85, 50))
-        self.btn_5_4.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op5_4.PNG);")
-        self.btn_5_4.setText("")
-        self.btn_5_4.setObjectName("btn_5_4")
-        self.btn_5_5 = QtWidgets.QPushButton(self.panel_op5)
-        self.btn_5_5.setGeometry(QtCore.QRect(5, 120, 85, 50))
-        self.btn_5_5.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op5_5.PNG);")
-        self.btn_5_5.setText("")
-        self.btn_5_5.setObjectName("btn_5_5")
-        self.btn_5_6 = QtWidgets.QPushButton(self.panel_op5)
-        self.btn_5_6.setGeometry(QtCore.QRect(95, 120, 85, 50))
-        self.btn_5_6.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op5_6.PNG);")
-        self.btn_5_6.setText("")
-        self.btn_5_6.setObjectName("btn_5_6")
-        self.panel_op6 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op6.setEnabled(True)
-        self.panel_op6.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op6.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op6.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op6.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op6.setObjectName("panel_op6")
-        self.selection_8 = QtWidgets.QLabel(self.panel_op6)
-        self.selection_8.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_8.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_8.setText("")
-        self.selection_8.setObjectName("selection_8")
-        self.btn_6_1 = QtWidgets.QPushButton(self.panel_op6)
-        self.btn_6_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_6_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op6.PNG);")
-        self.btn_6_1.setText("")
-        self.btn_6_1.setObjectName("btn_6_1")
-        self.btn_6_2 = QtWidgets.QPushButton(self.panel_op6)
-        self.btn_6_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_6_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op6_2.PNG);")
-        self.btn_6_2.setText("")
-        self.btn_6_2.setObjectName("btn_6_2")
-        self.btn_6_3 = QtWidgets.QPushButton(self.panel_op6)
-        self.btn_6_3.setGeometry(QtCore.QRect(5, 60, 85, 50))
-        self.btn_6_3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op6_3.PNG);")
-        self.btn_6_3.setText("")
-        self.btn_6_3.setObjectName("btn_6_3")
-        self.btn_6_4 = QtWidgets.QPushButton(self.panel_op6)
-        self.btn_6_4.setGeometry(QtCore.QRect(95, 60, 85, 50))
-        self.btn_6_4.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op6_4.PNG);")
-        self.btn_6_4.setText("")
-        self.btn_6_4.setObjectName("btn_6_4")
-        self.panel_op7 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op7.setEnabled(True)
-        self.panel_op7.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op7.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op7.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op7.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op7.setObjectName("panel_op7")
-        self.selection_10 = QtWidgets.QLabel(self.panel_op7)
-        self.selection_10.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_10.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_10.setText("")
-        self.selection_10.setObjectName("selection_10")
-        self.btn_7_1 = QtWidgets.QPushButton(self.panel_op7)
-        self.btn_7_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_7_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op7.PNG);")
-        self.btn_7_1.setText("")
-        self.btn_7_1.setObjectName("btn_7_1")
-        self.btn_7_2 = QtWidgets.QPushButton(self.panel_op7)
-        self.btn_7_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_7_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op7_2.PNG);")
-        self.btn_7_2.setText("")
-        self.btn_7_2.setObjectName("btn_7_2")
-        self.btn_7_3 = QtWidgets.QPushButton(self.panel_op7)
-        self.btn_7_3.setGeometry(QtCore.QRect(5, 60, 85, 50))
-        self.btn_7_3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op7_3.PNG);")
-        self.btn_7_3.setText("")
-        self.btn_7_3.setObjectName("btn_7_3")
-        self.btn_7_4 = QtWidgets.QPushButton(self.panel_op7)
-        self.btn_7_4.setGeometry(QtCore.QRect(95, 60, 85, 50))
-        self.btn_7_4.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op7_4.PNG);")
-        self.btn_7_4.setText("")
-        self.btn_7_4.setObjectName("btn_7_4")
-        self.btn_7_5 = QtWidgets.QPushButton(self.panel_op7)
-        self.btn_7_5.setGeometry(QtCore.QRect(5, 115, 85, 50))
-        self.btn_7_5.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op7_5.PNG);")
-        self.btn_7_5.setText("")
-        self.btn_7_5.setObjectName("btn_7_5")
-        self.btn_7_6 = QtWidgets.QPushButton(self.panel_op7)
-        self.btn_7_6.setGeometry(QtCore.QRect(95, 115, 85, 50))
-        self.btn_7_6.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op7_6.PNG);")
-        self.btn_7_6.setText("")
-        self.btn_7_6.setObjectName("btn_7_6")
-        self.btn_7_7 = QtWidgets.QPushButton(self.panel_op7)
-        self.btn_7_7.setGeometry(QtCore.QRect(5, 170, 85, 50))
-        self.btn_7_7.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op7_7.PNG);")
-        self.btn_7_7.setText("")
-        self.btn_7_7.setObjectName("btn_7_7")
-        self.btn_7_8 = QtWidgets.QPushButton(self.panel_op7)
-        self.btn_7_8.setGeometry(QtCore.QRect(95, 170, 85, 50))
-        self.btn_7_8.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op7_8.PNG);")
-        self.btn_7_8.setText("")
-        self.btn_7_8.setObjectName("btn_7_8")
-        self.btn_7_9 = QtWidgets.QPushButton(self.panel_op7)
-        self.btn_7_9.setGeometry(QtCore.QRect(5, 225, 85, 50))
-        self.btn_7_9.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op7_9.PNG);")
-        self.btn_7_9.setText("")
-        self.btn_7_9.setObjectName("btn_7_9")
-        self.panel_op8 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op8.setEnabled(True)
-        self.panel_op8.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op8.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op8.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op8.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op8.setObjectName("panel_op8")
-        self.selection_11 = QtWidgets.QLabel(self.panel_op8)
-        self.selection_11.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_11.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_11.setText("")
-        self.selection_11.setObjectName("selection_11")
-        self.btn_8_1 = QtWidgets.QPushButton(self.panel_op8)
-        self.btn_8_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_8_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op8.PNG);")
-        self.btn_8_1.setText("")
-        self.btn_8_1.setObjectName("btn_8_1")
-        self.btn_8_2 = QtWidgets.QPushButton(self.panel_op8)
-        self.btn_8_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_8_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op8_2.PNG);")
-        self.btn_8_2.setText("")
-        self.btn_8_2.setObjectName("btn_8_2")
-        self.btn_8_3 = QtWidgets.QPushButton(self.panel_op8)
-        self.btn_8_3.setGeometry(QtCore.QRect(5, 60, 85, 50))
-        self.btn_8_3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op8_3.PNG);")
-        self.btn_8_3.setText("")
-        self.btn_8_3.setObjectName("btn_8_3")
-        self.btn_8_4 = QtWidgets.QPushButton(self.panel_op8)
-        self.btn_8_4.setGeometry(QtCore.QRect(95, 60, 85, 50))
-        self.btn_8_4.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op8_4.PNG);")
-        self.btn_8_4.setText("")
-        self.btn_8_4.setObjectName("btn_8_4")
-        self.btn_8_5 = QtWidgets.QPushButton(self.panel_op8)
-        self.btn_8_5.setGeometry(QtCore.QRect(5, 115, 85, 50))
-        self.btn_8_5.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op8_5.PNG);")
-        self.btn_8_5.setText("")
-        self.btn_8_5.setObjectName("btn_8_5")
-        self.panel_op9 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op9.setEnabled(True)
-        self.panel_op9.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op9.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op9.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op9.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op9.setObjectName("panel_op9")
-        self.selection_12 = QtWidgets.QLabel(self.panel_op9)
-        self.selection_12.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_12.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_12.setText("")
-        self.selection_12.setObjectName("selection_12")
-        self.btn_9_1 = QtWidgets.QPushButton(self.panel_op9)
-        self.btn_9_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_9_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op9.PNG);")
-        self.btn_9_1.setText("")
-        self.btn_9_1.setObjectName("btn_9_1")
-        self.btn_9_2 = QtWidgets.QPushButton(self.panel_op9)
-        self.btn_9_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_9_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op9_2.PNG);")
-        self.btn_9_2.setText("")
-        self.btn_9_2.setObjectName("btn_9_2")
-        self.panel_op10 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op10.setEnabled(True)
-        self.panel_op10.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op10.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op10.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op10.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op10.setObjectName("panel_op10")
-        self.selection_13 = QtWidgets.QLabel(self.panel_op10)
-        self.selection_13.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_13.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_13.setText("")
-        self.selection_13.setObjectName("selection_13")
-        self.btn_10_1 = QtWidgets.QPushButton(self.panel_op10)
-        self.btn_10_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_10_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op10.PNG);")
-        self.btn_10_1.setText("")
-        self.btn_10_1.setObjectName("btn_10_1")
-        self.btn_10_2 = QtWidgets.QPushButton(self.panel_op10)
-        self.btn_10_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_10_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op10_2.PNG);")
-        self.btn_10_2.setText("")
-        self.btn_10_2.setObjectName("btn_10_2")
-        self.btn_10_3 = QtWidgets.QPushButton(self.panel_op10)
-        self.btn_10_3.setGeometry(QtCore.QRect(5, 60, 85, 50))
-        self.btn_10_3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op10_3.PNG);")
-        self.btn_10_3.setText("")
-        self.btn_10_3.setObjectName("btn_10_3")
-        self.btn_10_4 = QtWidgets.QPushButton(self.panel_op10)
-        self.btn_10_4.setGeometry(QtCore.QRect(95, 60, 85, 50))
-        self.btn_10_4.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op10_4.PNG);")
-        self.btn_10_4.setText("")
-        self.btn_10_4.setObjectName("btn_10_4")
-        self.panel_op11 = QtWidgets.QFrame(self.centralwidget)
-        self.panel_op11.setEnabled(True)
-        self.panel_op11.setGeometry(QtCore.QRect(600, 70, 185, 300))
-        self.panel_op11.setStyleSheet("background-color: rgb(0, 0, 0);")
-        self.panel_op11.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.panel_op11.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.panel_op11.setObjectName("panel_op11")
-        self.selection_14 = QtWidgets.QLabel(self.panel_op11)
-        self.selection_14.setGeometry(QtCore.QRect(1, 1, 183, 298))
-        self.selection_14.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.selection_14.setText("")
-        self.selection_14.setObjectName("selection_14")
-        self.btn_11_1 = QtWidgets.QPushButton(self.panel_op11)
-        self.btn_11_1.setGeometry(QtCore.QRect(5, 5, 85, 50))
-        self.btn_11_1.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op11.PNG);")
-        self.btn_11_1.setText("")
-        self.btn_11_1.setObjectName("btn_11_1")
-        self.btn_11_2 = QtWidgets.QPushButton(self.panel_op11)
-        self.btn_11_2.setGeometry(QtCore.QRect(95, 5, 85, 50))
-        self.btn_11_2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op11_2.PNG);")
-        self.btn_11_2.setText("")
-        self.btn_11_2.setObjectName("btn_11_2")
-        self.btn_11_3 = QtWidgets.QPushButton(self.panel_op11)
-        self.btn_11_3.setGeometry(QtCore.QRect(5, 60, 85, 50))
-        self.btn_11_3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op11_3.PNG);")
-        self.btn_11_3.setText("")
-        self.btn_11_3.setObjectName("btn_11_3")
-        self.btn_11_4 = QtWidgets.QPushButton(self.panel_op11)
-        self.btn_11_4.setGeometry(QtCore.QRect(95, 60, 85, 50))
-        self.btn_11_4.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op11_4.PNG);")
-        self.btn_11_4.setText("")
-        self.btn_11_4.setObjectName("btn_11_4")
-        self.btn_11_5 = QtWidgets.QPushButton(self.panel_op11)
-        self.btn_11_5.setGeometry(QtCore.QRect(5, 120, 85, 50))
-        self.btn_11_5.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/op/op11_5.PNG);")
-        self.btn_11_5.setText("")
-        self.btn_11_5.setObjectName("btn_11_5")
+
+        x, y = 10, 60
+        width, height = 63, 75
+        ascX, ascY = 68, 80
+
+        self.buttons_op = []
+
+        for i in range(len(self.folders)):
+            button = QtWidgets.QPushButton(self.centralwidget)
+            button.setGeometry(QtCore.QRect(x+(ascX*(i%8)), y+(ascY*int(i/8)), width, height))
+            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+            button.setText("")
+            button.setObjectName("btn_%d"%(i))
+
+            pixmap = QPixmap(".\\image\\%s\\0.png"%(self.folders[i]))
+            button.setIcon(QtGui.QIcon(pixmap.scaled(50, 50, QtCore.Qt.IgnoreAspectRatio)))
+
+            button.setIconSize(QtCore.QSize(50, 50))
+
+            button.clicked.connect(partial(self.changePanel, self.folders[i]))
+
+            self.buttons_op.append(button)
+
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.btn_op1.clicked.connect(partial(self.raise2,self.panel_op1))
-        self.btn_op2.clicked.connect(partial(self.raise2,self.panel_op2))
-        self.btn_op3.clicked.connect(partial(self.raise2,self.panel_op3))
-        self.btn_op4.clicked.connect(partial(self.raise2,self.panel_op4))
-        self.btn_op5.clicked.connect(partial(self.raise2,self.panel_op5))
-        self.btn_op6.clicked.connect(partial(self.raise2,self.panel_op6))
-        self.btn_op7.clicked.connect(partial(self.raise2,self.panel_op7))
-        self.btn_op8.clicked.connect(partial(self.raise2,self.panel_op8))
-        self.btn_op9.clicked.connect(partial(self.raise2,self.panel_op9))
-        self.btn_op10.clicked.connect(partial(self.raise2,self.panel_op10))
-        self.btn_op11.clicked.connect(partial(self.raise2,self.panel_op11))
-        
-        self.btn_1_1.clicked.connect(partial(self.append_,"^"))
-        self.btn_1_2.clicked.connect(partial(self.append_,"_"))
-
-        self.btn_2_1.clicked.connect(partial(self.append_,"\\sqrt { }"))
-        self.btn_2_2.clicked.connect(partial(self.append_,"\\sqrt [ ]{ }"))
-
-        self.btn_3_1.clicked.connect(partial(self.append_,"\\frac { }{ }"))
-
-        self.btn_4_1.clicked.connect(partial(self.append_,"\\int _{ }^{ }{ }"))
-        self.btn_4_2.clicked.connect(partial(self.append_,"\\oint _{ }^{ }{ }"))
-        self.btn_4_3.clicked.connect(partial(self.append_,"\\iint _{ }^{ }{ }"))
-        self.btn_4_4.clicked.connect(partial(self.append_,"\\iiint _{ }^{ }{ }"))
-        self.btn_4_5.clicked.connect(partial(self.append_,"\\oiint _{ }^{ }{ }"))
-        self.btn_4_6.clicked.connect(partial(self.append_,"\\oiiint _{ }^{ }{ }"))
-
-        self.btn_5_1.clicked.connect(partial(self.append_,"\\sum _{ }^{ }{ }"))
-        self.btn_5_2.clicked.connect(partial(self.append_,"\\prod { }"))
-        self.btn_5_3.clicked.connect(partial(self.append_,"\\bigcap _{ }^{ }{ }"))
-        self.btn_5_4.clicked.connect(partial(self.append_,"\\bigcup _{ }^{ }{ }"))
-        self.btn_5_5.clicked.connect(partial(self.append_,"\\bigvee _{ }^{ }{ }"))
-        self.btn_5_6.clicked.connect(partial(self.append_,"\\bigedge _{ }^{ }{ }"))
-
-        self.btn_6_1.clicked.connect(partial(self.append_,"\\left{ \\right}"))
-        self.btn_6_2.clicked.connect(partial(self.append_,"\\left( \\right)"))
-        self.btn_6_3.clicked.connect(partial(self.append_,"\\left[ \\right]"))
-        self.btn_6_4.clicked.connect(partial(self.append_,"\\left< \\right>"))
-
-        self.btn_7_1.clicked.connect(partial(self.append_,"\\sin "))
-        self.btn_7_2.clicked.connect(partial(self.append_,"\\cos "))
-        self.btn_7_3.clicked.connect(partial(self.append_,"\\tan "))
-        self.btn_7_4.clicked.connect(partial(self.append_,"\\csc "))
-        self.btn_7_5.clicked.connect(partial(self.append_,"\\sec "))
-        self.btn_7_6.clicked.connect(partial(self.append_,"\\cot "))
-        self.btn_7_7.clicked.connect(partial(self.append_,"f^{}\\left( \\right) "))
-        self.btn_7_8.clicked.connect(partial(self.append_,"g^{}\\left( \\right) "))
-        self.btn_7_9.clicked.connect(partial(self.append_,"h^{}\\left( \\right) "))
-
-        self.btn_8_1.clicked.connect(partial(self.append_,"\\log_{ } "))
-        self.btn_8_2.clicked.connect(partial(self.append_,"\\ln "))
-        self.btn_8_3.clicked.connect(partial(self.append_,"\\lim "))
-        self.btn_8_4.clicked.connect(partial(self.append_,"\\min "))
-        self.btn_8_5.clicked.connect(partial(self.append_,"\\max "))
-
-        self.btn_9_1.clicked.connect(partial(self.append_,"\\begin{pmatrix} \\end{pmatrix} "))
-        self.btn_9_2.clicked.connect(partial(self.append_,"\\begin{bmatrix} \\end{bmatrix} "))
-
-        self.btn_10_1.clicked.connect(partial(self.append_,"+ "))
-        self.btn_10_1.clicked.connect(partial(self.append_,"- "))
-        self.btn_10_1.clicked.connect(partial(self.append_,"\\div "))
-        self.btn_10_1.clicked.connect(partial(self.append_,"\\times "))
-
-        self.btn_11_1.clicked.connect(partial(self.append_,"\\alpha "))
-        self.btn_11_2.clicked.connect(partial(self.append_,"\\beta "))
-        self.btn_11_3.clicked.connect(partial(self.append_,"\\gamma "))
-        self.btn_11_4.clicked.connect(partial(self.append_,"\\delta "))
-        self.btn_11_5.clicked.connect(partial(self.append_,"\\epsilon "))
-
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
         self.text_equation.setFocus()
+        self.changePanel(self.folders[0])
 
+    # 버튼 선택 패널을 바꾸기 위함 (패널을 만듬)
+    # stri : 폴더 이름
+    def changePanel(self, stri):
+        self.page = 0
+
+        for p in self.panels:
+            p.hide()
+        for b in self.buttons:
+            b.hide()
+
+        self.buttons.clear()
+        self.panels.clear()
+        # 폴더 개수만큼 반복
+        for i in range(len(self.folders)):
+
+            # 인자가 폴더 리스트 i번째 와 같으면
+            if stri == self.folders[i]:
+                # 일치한 폴더의 image 파일 개수 받아옴
+                count = self.lens[self.folders[i]]
+
+                # 한 페이지 당 10개 이미지 
+                # 페이지 개수를 구함
+                page = math.ceil(count / 10)
+
+                # 페이지 개수만큼 반복
+                for i2 in range(page):
+
+                    # 패널 만듬
+                    panel = QtWidgets.QFrame(self.centralwidget)
+                    panel.setGeometry(QtCore.QRect(600,70,185,300))
+                    panel.setStyleSheet("background-color: rgb(255,255,255);")
+                    panel.setFrameShape(QtWidgets.QFrame.StyledPanel)
+                    panel.setObjectName("panel_%s_%d"%(stri,i2))
+
+                    # 10번 반복 (패널 내부에 버튼 넣기 위함)
+                    for i3 in range(1, 11):
+
+                        # 마지막 페이지 버튼 개수 초과 방지
+                        if i2+1 == page:
+                            if i3-1 == (count-1) % 10 + 1:
+                                break
+
+                        # x, y 좌표 구함
+                        x, y = 5, 5
+                        ascX, ascY = 90, 55
+
+                        if i3 % 2 == 0:
+                            x = x + ascX
+                            y = y + ascY * (math.floor(i3 / 2)-1)
+
+                        else:
+                            y = y + ascY * math.floor(i3 / 2)
+
+                        
+                        # 버튼 만듬
+                        button = QtWidgets.QPushButton(panel)
+                        button.setGeometry(QtCore.QRect(x, y, 85, 50))
+                        button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                        button.setText("")
+                        button.setObjectName("btn_%s_%d"%(stri,i2*10+i3))
+
+                        # 이미지 받아옴
+                        pixmap = QPixmap(".\\image\\%s\\%d.png"%(stri, i2*10+i3))
+                        button.setIcon(QtGui.QIcon(pixmap.scaled(50, 50, QtCore.Qt.IgnoreAspectRatio)))
+                        button.setIconSize(QtCore.QSize(45, 45))
+
+                        button.clicked.connect(partial(self.addText, stri, i2 * 10 + i3))
+
+                        self.buttons.append(button)
+
+                    # 페이지 넘김 버튼 만듬
+                    # 페이지가 1보다 많을때
+                    if page > 1:
+                        # 첫 페이지 일때
+                        if i2 == 0:
+                            button = QtWidgets.QPushButton(panel)
+                            button.setGeometry(QtCore.QRect(150, 280, 25, 15))
+                            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                            button.setText("")
+                            button.setIcon(QtGui.QIcon(".\\resources\\n.png"))
+                            button.setIconSize(QtCore.QSize(15, 12))
+
+                            button.clicked.connect(partial(self.changePage, 1))
+
+                            self.buttons.append(button)
+                        # 마지막 페이지 일때
+                        elif i2 == page-1:
+                            button = QtWidgets.QPushButton(panel)
+                            button.setGeometry(QtCore.QRect(5, 280, 25, 15))
+                            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                            button.setText("")
+                            button.setIcon(QtGui.QIcon(".\\resources\\b.png"))
+                            button.setIconSize(QtCore.QSize(15, 12))
+
+                            button.clicked.connect(partial(self.changePage, -1))
+
+                            self.buttons.append(button)
+                        # 그 외
+                        else:
+                            button = QtWidgets.QPushButton(panel)
+                            button.setGeometry(QtCore.QRect(5, 280, 25, 15))
+                            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                            button.setText("")
+                            button.setIcon(QtGui.QIcon(".\\resources\\b.png"))
+                            button.setIconSize(QtCore.QSize(15, 12))
+
+                            button2 = QtWidgets.QPushButton(panel)
+                            button2.setGeometry(QtCore.QRect(150, 280, 25, 15))
+                            button2.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                            button2.setText("")
+                            button2.setIcon(QtGui.QIcon(".\\resources\\n.png"))
+                            button2.setIconSize(QtCore.QSize(15, 12))
+
+                            button.clicked.connect(partial(self.changePage, -1))
+                            button2.clicked.connect(partial(self.changePage, 1))
+
+                            self.buttons.append(button)
+                            self.buttons.append(button2)
+
+
+                    # 패널 배열에 추가
+                    self.panels.append(panel)
+                    panel.show()
+                self.raise2(self.panels[0])
+
+    # 버튼 선택 패널의 버튼이 눌러졌을때 
+    # str_folder : 폴더이름
+    # idx : 폴더 내 파일의 번호
+    def addText(self, str_folder, idx):
+        info = MTlist.getInfo(str_folder, idx)
+        #self.text_equation.append(info[0])
+        self.append_(info[0])
+
+    # 버튼 선택 패널의 페이지 이동 버튼이 눌러졌을때
+    # page : 1이 들어오면 다음 페이지 -1이 들어오면 이전 페이지
+    def changePage(self, page):
+        self.page = self.page + page
+        self.raise2(self.panels[self.page])
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -619,6 +269,7 @@ class Ui_MainWindow(object):
     def raise2(self, widget=None):
         if widget is not None:
             widget.raise_()
+            widget.repaint()
         self.text_equation.setFocus()
 
 import back_arrow_rc
