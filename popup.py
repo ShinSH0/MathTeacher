@@ -9,8 +9,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Form(object):
-
-
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(400, 400)
@@ -26,14 +24,14 @@ class Ui_Form(object):
         self.lineEdit.setGeometry(QtCore.QRect(100, 86, 261, 31))
         self.lineEdit.setStyleSheet("font: 75 11pt \"Arial\";\n"
 "background-color: rgb(255, 255, 255);")
-        self.lineEdit.setText("x y z k m n")
+        self.lineEdit.setText("")
         self.lineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit.setObjectName("lineEdit")
         self.lineEdit_2 = QtWidgets.QLineEdit(Form)
         self.lineEdit_2.setGeometry(QtCore.QRect(100, 142, 261, 31))
         self.lineEdit_2.setStyleSheet("font: 75 11pt \"Arial\";\n"
 "background-color: rgb(255, 255, 255);")
-        self.lineEdit_2.setText("A(3,3) B(3,3)")
+        self.lineEdit_2.setText("")
         self.lineEdit_2.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.label_3 = QtWidgets.QLabel(Form)
@@ -47,7 +45,7 @@ class Ui_Form(object):
         self.lineEdit_3.setGeometry(QtCore.QRect(100, 198, 261, 31))
         self.lineEdit_3.setStyleSheet("font: 75 11pt \"Arial\";\n"
 "background-color: rgb(255, 255, 255);")
-        self.lineEdit_3.setText("f g h")
+        self.lineEdit_3.setText("")
         self.lineEdit_3.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.label_4 = QtWidgets.QLabel(Form)
@@ -64,9 +62,7 @@ class Ui_Form(object):
 "color: rgb(0, 0, 0);")
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName("label_5")
-        self.items = ['solve', 'dsolve', 'solveset']
         self.comboBox = QtWidgets.QComboBox(Form)
-        self.comboBox.addItems(self.items)
         self.comboBox.setGeometry(QtCore.QRect(100, 252, 261, 31))
         self.comboBox.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.comboBox.setIconSize(QtCore.QSize(16, 16))
@@ -98,6 +94,7 @@ class Ui_Form(object):
         self.pushButton.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
         self.pushButton.setText("")
         self.pushButton.setObjectName("pushButton")
+
         self.pushButton.setIcon(QtGui.QIcon(".\\resources\\check.png"))
 
         self.pushButton.setIconSize(QtCore.QSize(60, 40))
@@ -133,10 +130,9 @@ class Ui_Form(object):
         self.lineEdit_2.raise_()
         self.lineEdit_3.raise_()
         self.pushButton.raise_()
-        self.pushButton.setFocus()
+
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
-
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
@@ -146,6 +142,4 @@ class Ui_Form(object):
         self.label_4.setText(_translate("Form", "Function"))
         self.label_5.setText(_translate("Form", "Solver"))
         self.lbl_title.setText(_translate("Form", "MathTeacher"))
- 
-
 

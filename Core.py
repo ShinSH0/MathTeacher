@@ -62,6 +62,12 @@ class MyException(Exception):
     def __init__(self, msg):
         self.msg = msg
 def getsymbs(complex_str, matrix_str, function_str):
+    """d 
+    
+    Arguments:
+        matrix_str {[type]} -- [description]
+        function_str {[type]} -- [description]
+    """
     complex = list(filter( lambda x: x != '' ,complex_str.split(" ")))
     matrix = list(filter( lambda x: x != '' ,matrix_str.split(" ")))
     size_list = []
