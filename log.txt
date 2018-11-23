@@ -1,0 +1,112 @@
+2018-11-21 15:54:38.537714: x ^ { 2 } = 7
+2018-11-21 15:55:44.391503: 2
+2018-11-21 15:56:40.318985: x ^ { 2 } = 71
+2018-11-21 16:00:25.044118: x ^ { 2 }
+2018-11-21 16:04:28.877488: 3 x ^ { 2 } = 8
+2018-11-21 16:05:52.815095: 7 x ^ { 5 } = x
+2018-11-21 16:07:56.901787: 5 x ^ { 2 } = 7
+2018-11-21 16:08:27.791045: 37 + x = 5
+2018-11-21 16:11:35.504383: 7
+2018-11-21 16:15:12.043917: 57
+2018-11-21 16:23:57.686232: 3 x + 2 y = 7
+2018-11-21 16:25:17.518770: 3 x ^ { 2 }
+2018-11-21 16:27:12.282228: \operatorname { lim } _ { x \rightarrow 0 } \frac { \operatorname { sin } ( x ) } { x }
+2018-11-21 16:27:57.946805: \int _ { 0 } ^ { 3 } x ^ { 2 } + 7 d x
+2018-11-21 16:29:19.556410: x = 7
+2018-11-21 16:29:40.862881: x ^ { 2 } = 3
+2018-11-21 16:33:32.201004: 17 x ^ { 2 } + 7 = 51
+2018-11-21 16:39:02.719134: 17 x ^ { 2 } + 7 = 51
+2018-11-21 16:39:57.725451: 17 x ^ { 2 } + 7 = 51
+2018-11-21 16:41:11.117743: | 7 x ^ { 2 } + 7 = 5 |
+2018-11-21 16:41:46.903155: 17 x ^ { 2 } + 7 = 51
+2018-11-21 17:31:24.150570: x ^ { 2 } + 11 = 11
+2018-11-21 20:50:14.178995: 3 x ^ { 2 } + 5 = 101
+2018-11-21 20:53:03.461243: 571 - x
+2018-11-21 20:55:27.173786: 5 x + 7 = 11
+2018-11-21 20:57:44.898084: \operatorname { lim } _ { x \rightarrow 0 } \frac { x } { x ^ { 2 } }
+2018-11-21 20:58:54.204625: \sum _ { k = 1 } ^ { 5 } k = 3 x
+2018-11-21 21:08:43.908105: 51 = x ^ { 3 }
+2018-11-21 21:12:36.441617: \operatorname { lim } _ { x \rightarrow \infty } \frac { 2 x ^ { 2 } } { x ^ { 2 } }
+2018-11-21 21:14:15.669625: 5321 ^ { 2 } = x
+2018-11-21 21:15:57.435238: 37 = 5 x
+2018-11-21 21:17:04.146179: 71 ^ { 2 } = x
+2018-11-21 21:17:44.771840: 37
+2018-11-21 21:17:59.460701: 3 x ^ { 2 } + 5 = 17
+2018-11-21 21:18:39.834188: 3 x ^ { 2 } = 71
+2018-11-21 21:19:12.800285: \frac { \operatorname { sin } x \operatorname { cos } x } { \operatorname { tan } x }
+2018-11-21 21:22:11.622375: 5 x ^ { 2 } = x
+2018-11-21 21:24:15.550557: \frac { 37 ^ { 2 } } { 5 } = e ^ { x }
+2018-11-21 21:25:45.205744: 7 ^ { 2 ^ { 5 } } = x
+2018-11-21 21:26:29.718554: 7 x = 21
+2018-11-21 21:32:02.222700: \operatorname { sin } \operatorname { cos } x
+2018-11-21 22:01:43.541651: 3 x ^ { 2 } - 6 x - 2 = 0
+2018-11-21 22:06:54.747441: 3 x ^ { 2 } - 6 x - 2 = 0
+2018-11-21 22:07:39.143230: x ^ { 2 } + 5 x - 3 = 0
+2018-11-21 22:08:26.784325: 23 = x
+2018-11-21 22:09:53.930847: 40 + x = ( 12 + x ) \times 3
+2018-11-21 23:22:37.886094: \left\{ \begin{array} { l } { x = 3 } \\ { x ^ { 2 } = 7 } \end{array} \right.
+2018-11-21 23:51:28.131112: \left\{ \begin{array} { l } { 4 x - 3 y = 6 } \\ { x + 2 y = ? } \end{array} \right.
+2018-11-22 11:41:16.138403: 3 x ^ { 2 } - 2 x = 0
+2018-11-22 11:41:55.626448: \left\{ \begin{array} { l } { 4 x - 3 y = 6 } \\ { x + 2 y = 7 } \end{array} \right.
+2018-11-22 11:43:04.655759: \int _ { 0 } ^ { 3 } \frac { x ^ { 2 } + x d x } { x }
+2018-11-22 11:44:01.241396: \operatorname { lim } _ { x \rightarrow 0 } \frac { \sqrt { 1 + x } - 1 } { x }
+2018-11-22 11:58:12.431276: \left. \begin{array} { c } { f ( x ) : = x ^ { 2 } + 1 } \\ { f ( 2 ) } \end{array} \right.
+2018-11-22 11:59:57.419410: f ( x ) : = x ^ { 2 } + 1
+2018-11-22 19:54:42.742634: \left\{ \begin{array} { l } { 4 x - 3 y = 6 } \\ { x + 2 y = 1 } \end{array} \right.
+2018-11-22 19:56:14.128681: \left\{ \begin{array} { l } { 4 x - 3 y = 6 } \\ { x + 2 y = 1 } \end{array} \right.
+2018-11-22 19:58:02.527934: \left\{ \begin{array} { l } { 4 x - 3 y = 6 } \\ { x + 2 y = 1 } \end{array} \right.
+2018-11-22 19:58:28.733758: \left. \begin{array} { c } { f ( x ) i = x ^ { 2 } + 1 } \\ { f ( 2 ) } \end{array} \right.
+2018-11-22 19:59:55.057531: \left. \begin{array} { c } { f ( x ) = \sqrt { x + 1 } } \\ { f ( 2 ) } \end{array} \right.
+2018-11-22 20:00:25.422869: \operatorname { lim } _ { x \rightarrow 0 } \frac { \operatorname { sin } x } { x }
+2018-11-22 20:00:58.785835: \sum _ { k = 1 } ^ { \infty } k
+2018-11-22 20:01:41.752060: \sum _ { k = 1 } ^ { \infty } \frac { 1 } { k ^ { 2 } }
+2018-11-22 20:14:41.719156: f ( x ) = \left\{ \begin{array} { l l } { x ^ { 2 } } & { \text { if } x < 0 } \\ { 2 x } & { \text { if } x \geq 0 } \end{array} \right.
+2018-11-23 09:44:34.305955: 
+2018-11-23 09:45:26.097722: f ( x ) = \left\{ \begin{array} { l l } { a } & { \text { if } x < 0 } \\ { 1 } & { \text { if } x < 0 } \end{array} \right.
+2018-11-23 09:47:38.277798: 
+2018-11-23 09:48:45.736897: \left. \begin{array} { c } { f ( x ) : = x ^ { 2 } + x + 1 } \\ { f ( 3 ) } \end{array} \right.
+2018-11-23 09:51:17.819773: \left. \begin{array} { c } { f ( x ) : = x ^ { 2 } + 1 } \\ { f ( 51 ) } \end{array} \right.
+2018-11-23 09:52:23.622261: \sum _ { k = 1 } ^ { \infty } \frac { 1 } { k ^ { 2 } }
+2018-11-23 09:54:26.665934: 
+2018-11-23 09:55:48.604838: \left\{ \begin{array} { l l } { f ( x ) } & { = \left\{ \begin{array} { l l } { 1 } & { \text { if } x > 0 } \\ { 0 } & { \text { if } x \leq 0 } \end{array} \right. } \end{array} \right.
+2018-11-23 09:56:32.190189: 
+2018-11-23 09:57:41.390257: \left\{ \begin{array} { l } { f ( x ) = \left\{ \begin{array} { l l } { 1 } & { \text { if } x < 0 } \\ { 0 } & { \text { if } x \geq 0 } \end{array} \right. } \end{array} \right.
+2018-11-23 10:04:04.447658: \left\{ \begin{array} { l } { 53 \{ } \\ { 2 \left\{ \begin{array} { l } { 1 } \\ { 3 } \end{array} \right. } \end{array} \right.
+2018-11-23 10:04:52.992644: \left\{ \begin{array} { l } { f ( x ) = \left\{ \begin{array} { l } { 1 } \\ { 2 } \end{array} \right. } \end{array} \right.
+2018-11-23 10:08:57.394393: 
+2018-11-23 10:09:38.416870: 
+2018-11-23 10:11:38.244987: 
+2018-11-23 10:12:16.231152: \left\{ \begin{array} { l } { 51 } \\ { 2 } \end{array} \right.
+2018-11-23 10:13:29.736109: \left\{ \begin{array} { l } { f ( x ) } & { \left[ \begin{array} { l } { 1 } \\ { 2 } \end{array} \right. } \end{array} \right.
+2018-11-23 10:16:32.436310: f ( x ) = \left\{ \begin{array} { l l } { 1 } & { x > 0 } \\ { 0 } & { x \leq 0 } \end{array} \right.
+2018-11-23 10:17:09.989606: f ( x ) i = \left\{ \begin{array} { l l } { 1 } & { i + x > 0 } \\ { 0 } & { \text { if } x \leq 0 } \end{array} \right.
+2018-11-23 10:21:03.906949: \left\{ \begin{array} { l } { f ( x ) : = \left\{ \begin{array} { l l } { 1 } & { 11 + x > 0 } \\ { 0 } & { \text { if } x \leq 0 } \end{array} \right. } \end{array} \right.
+2018-11-23 10:21:29.912418: 
+2018-11-23 10:24:09.097518: \sum _ { f ( 2 ) } ^ { 1 }
+2018-11-23 10:24:34.790990: \left\{ \begin{array} { l } { 1 } \\ { f ( 2 ) } \end{array} \right.
+2018-11-23 10:48:16.410759: 
+2018-11-23 11:06:20.728220: \left\{ \begin{array} { l } { f ( x ) = \{ 0 \text { if } x \leq 0 } \\ { f ( 1 ) } \end{array} \right.
+2018-11-23 11:12:04.486859: x ^ { 2 } + y = 18
+2018-11-23 11:23:00.761337: \operatorname { lim } _ { x \rightarrow 0 } \frac { \sqrt { x + 1 } - 1 } { x }
+2018-11-23 11:23:34.611273: f ( x ) = \frac { 2 x ^ { 2 } } { x }
+2018-11-23 11:36:30.704182: \sum _ { k = 1 } ^ { 3 } k
+2018-11-23 11:38:09.117192: \sum _ { k = 1 } ^ { 3 } k ^ { 2 }
+2018-11-23 11:39:53.102910: \sum _ { k = 1 } ^ { 3 } k ^ { 2 }
+2018-11-23 11:40:28.062992: \operatorname { lim } _ { x \rightarrow 0 } \frac { \operatorname { sin } x } { x }
+2018-11-23 11:41:30.854269: \operatorname { lim } _ { x \rightarrow 0 } \frac { \operatorname { sin } x } { x }
+2018-11-23 11:42:00.408255: \operatorname { sin } x \operatorname { cos } x - 2
+2018-11-23 11:57:52.016831: \operatorname { sin } x \operatorname { cos } x - 2
+2018-11-23 11:58:47.569320: [ \frac { ( n + 1 ) n } { 2 } ] ^ { 2 }
+2018-11-23 12:11:35.911487: \left\{ \begin{array} { c } { 4 x - 3 y = 6 } \\ { x + 2 y = 7 } \end{array} \right.
+2018-11-23 12:30:16.331174: \left\{ \begin{array} { r } { 4 x - 3 y = 6 } \\ { x + 2 y = 1 } \end{array} \right.
+2018-11-23 12:53:27.017109: x ^ { 2 } - 3 x + 2 = 0
+2018-11-23 12:53:57.969501: \left\{ \begin{array} { l } { 4 x - 3 y = 6 } \\ { x + 2 y = 7 } \end{array} \right.
+2018-11-23 13:01:38.569176: \prod _ { k = 1 } ^ { 5 } k x + 5 = 29
+2018-11-23 13:32:00.498096: A = \left( \begin{array} { l } { 1 } \\ { 2 } \\ { 3 } \end{array} \right)
+2018-11-23 13:32:18.904540: A = \left( \begin{array} { l } { 2 } \\ { 3 } \end{array} \right)
+2018-11-23 15:09:43.625732: \left( \begin{array} { l } { 11 - 1 } \\ { 2 } \\ { 2 } & { 2 } \end{array} \right) A = \left( \begin{array} { c } { 2 } \\ { 7 } \end{array} \right)
+2018-11-23 15:11:00.292291: x ^ { 2 } + 1 = 0
+2018-11-23 15:12:41.864767: \left( \begin{array} { c c } { 2 } & { 9 - 2 } \\ { 1 } & { 0 - 4 } \\ { 2 } & { - 1 - 6 } \end{array} \right) \left( \begin{array} { l } { x } \\ { y } \\ { z } \end{array} \right) = \left( \begin{array} { l } { B } \\ { 1 } \\ { 4 } \end{array} \right)
+2018-11-23 15:14:32.878876: \left( \begin{array} { c c c } { 2 } & { 3 } & { - 2 } \\ { 1 } & { 0 } & { - 4 } \\ { 2 } & { - 1 } & { - 6 } \end{array} \right) \left( \begin{array} { l } { x } \\ { y } \\ { z } \end{array} \right) = \left( \begin{array} { l } { 8 } \\ { 1 } \\ { 4 } \end{array} \right)
+2018-11-23 19:47:31.554566: \left( \begin{array} { c c c } { 2 } & { 3 } & { - 2 } \\ { 1 } & { 0 } & { - 4 } \\ { 2 } & { - 1 } & { - } \end{array} \right) \left( \begin{array} { c } { x } \\ { y } \\ { 2 } \end{array} \right) = \left( \begin{array} { l } { 8 } \\ { 4 } \end{array} \right)
+2018-11-23 19:50:14.708036: A \left( \begin{array} { l } { 5 } \\ { 0 } \\ { 1 } \end{array} \right) = \left( \begin{array} { l } { 8 } \\ { 1 } \\ { 4 } \end{array} \right)

@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 from functools import reduce
-import datetime
 from operator import itemgetter
+import time
+import datetime
 #latex 2img에 필요함
 import io
 from PIL import Image, ImageOps
@@ -30,23 +31,72 @@ argright=['}',']',')'] #닫는 괄호들의 리스트
 maximum_call = 2
 img2latex_call = 0
 lendict = {} #getlen을 메모이제이션으로 구현하기 위해 필요한 변수, lendict가 있어서 getlen의 시간복잡도가 O(len(string)*len(parsed_list))가 된다.
+
 trianglefunction = ['sin','cos','tan','csc'] #삼각함수들
-defaultfunction = ['integrate','limit','sqrt','exp','Sum','Matrix','Prod'] +trianglefunction #기본적으로 sympy에서 정의된 함수들 
-triangleseperator = ['\\'+i for i in trianglefunction]
+relationalfunction = ['Eq','Ge','Le','Gt','Lt']
+pythonfunction = ['def','exec','return'] 
+defaultfunction = ['integrate','limit','sqrt','exp','Sum','Matrix','Prod','Piecewise'] +pythonfunction+trianglefunction +relationalfunction #기본적으로 sympy에서 정의된 함수들 
+
+
 defaultmatrix = []
 defaultcomplex = ['e']
+
 alphabet = [chr(i) for i in range(ord('A'), ord('Z')+1)]+[chr(i) for i in range(ord('a'), ord('z')+1)]
+
+triangleseperator = ['\\'+i for i in trianglefunction]
 seperator = ['+','-',',']
+escaped_seperator = []
+
+
 relationals = ['\\<','\\>','=',r'\leq',r'\geq'] # 관계식 종류 leq는 작거나 같음, geq는 크거나 같음이다.
 escaped_relationals = []
-escaped_seperator = []
-matrixsize = []
+
+matrix_name_list = []
+matrix_size = {}
+matrix_elems_dict ={}
+
 
 
 # 커스텀 Exception의 메시지는 에러의 발생원인을 잘 담고 있어서 유지보수가 쉽다.
 class MyException(Exception): 
     def __init__(self, msg):
         self.msg = msg
+def getsymbs(complex_str, matrix_str, function_str):
+    complex = list(filter( lambda x: x != '' ,complex_str.split(" ")))
+    matrix = list(filter( lambda x: x != '' ,matrix_str.split(" ")))
+    size_list = []
+    name_list = []
+    str_list = ['(',',',')']
+    i = 0
+    temp = ''
+    size = tuple()
+    for m in matrix:
+        while True:
+            idx = m.find(str_list[i])
+            if idx ==-1:
+                temp += m
+                break
+            else:   
+                if i==0:
+                    name_list.append(temp+m[:idx])
+                    temp = ''
+                elif i==1:
+                    size = int(temp+m[:idx])
+                    temp = ''
+                elif i==2:
+                    size = (size, int(temp+m[:idx]))
+                    temp = ''
+                    size_list.append(size)
+                i+=1
+                i%=3
+                m = m[idx+1:]
+                if m == '':
+                    break
+    if i!= 0:
+        raise Exception()
+    function = list(filter(lambda x: x != '',function_str.split(" ")))
+    
+    return [complex, [name_list,size_list], function]
 
 def getrange(range_list):
     first = range_list[0]
@@ -75,6 +125,9 @@ def replace_parts(string, range_list, str_list):
             replaced_str.append(string[i:_range.start])
             replaced_str.append(_str)
             i = _range.stop
+    replaced_str.append(string[i:])
+    #디버깅 쵝오
+    #print("replaced_str: ",replaced_str)
     return ''.join(replaced_str)
 
 #string의 시작문자열이 str_list에 있다면 그 인덱스를 반환한다.
@@ -147,7 +200,7 @@ def getlen(string, parsed_list,priority_list, row, begin,end,debugflag = False):
         # if debugflag:
         #     print(string[i:],(str_list[idx], idx+(prev+1))  if idx is not None else None, row,col)
         
-        if (idx is None or idx+(prev+1) != row)   and loopback[col] == col and (not isinstance(noparam[col],list) or not col in noparam[col][1]) and noparam[col] and getbool(times[col],cnt[col],begin,end):
+        if (idx is None or idx+(prev+1) != row)   and not parsed[col] == alphabet and loopback[col] == col and (not isinstance(noparam[col],list) or not col in noparam[col][1]) and noparam[col] and getbool(times[col],cnt[col],begin,end):
             #반복할 문자열의 횟수가 달성됐고, 이제 그 반복할 문자열이 안 나왔다면 들어오는 If문
             waslooped = False
             if insertidx[col] is None:
@@ -273,8 +326,7 @@ def getlen(string, parsed_list,priority_list, row, begin,end,debugflag = False):
                         lastlength = i
                     prev = -1
                 else:
-                    prev = idx
-                    if prev+1 == len(parsed_list)+1:
+                    if idx+1 == len(parsed_list)+1:
                         if next_flag:
                             prev = -1
                             i+=1
@@ -283,6 +335,8 @@ def getlen(string, parsed_list,priority_list, row, begin,end,debugflag = False):
                             prev_idx = idx
                             prev_idx_len = idx_len
                             continue
+                    else:                        
+                        prev = idx
                 next_flag= False
         else:
             #idx,idx_len = getidx(string[i:],parsed[col:],begin,end)
@@ -379,6 +433,11 @@ def repairparam(param_list, loopback, startidx, firstback, lastinsertidx, col):
         param_list[ii] = param_list[ii]+param_list[ii+1:]
         return param_list[:ii+1]
 
+
+def displaysetting(latexeq):
+    parsed_list,form_list,eval_list,priority_list = init('<','>',"displaysetting.txt",[[],[[],[]],[]])
+    return convertall(latexeq,parsed_list,form_list,eval_list,priority_list,'<','>')
+
 def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range_list=False):
     parsed = [i[0] for i in parsed_list[row]]
     loopback = [i[1] for i in parsed_list[row]]
@@ -420,10 +479,11 @@ def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range
         else:
             idx,idx_len = getidx(string[i:],str_list)
         #== 디버깅 쵝오 
-        
         # print(string[i:],param_list,str_list[idx] if idx is not None else idx, None if idx is None else idx+prev+1, row,col)
-        if (idx is None or idx+(prev+1) != row) and loopback[col] == col and (not isinstance(noparam[col],list) or not col in noparam[col][1]) and noparam[col] and getbool(times[col],cnt[col],begin,end):
+        if (idx is None or idx+(prev+1) != row) and not parsed[col] == alphabet and loopback[col] == col and (not isinstance(noparam[col],list) or not col in noparam[col][1]) and noparam[col] and getbool(times[col],cnt[col],begin,end):
             #반복할 문자열의 횟수가 달성됐고, 이제 그 반복할 문자열이 안 나왔다면 들어오는 If문
+            # 알파벳은 
+            
             waslooped = False
             if insertidx[col] is None:
                 lastinsertidx = insertidx[col] =  len(param_list)
@@ -585,8 +645,7 @@ def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range
                         lastlength = (i,ciridx)
                     prev = -1
                 else:
-                    prev = idx
-                    if prev+1 == len(parsed_list)+1:
+                    if idx+1 == len(parsed_list)+1:
                         if next_flag:
                             prev = -1
                             i+=1
@@ -595,6 +654,8 @@ def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range
                             prev_idx = idx
                             prev_idx_len = idx_len
                             continue
+                    else:
+                        prev = idx
                 next_flag= False
         else:
             idx ,idx_len= getidx(string[i:],parsed[col:])
@@ -982,8 +1043,9 @@ def parse(string,param,parsed,wasparam, begin, end):
                                     #시작 - 구분 - 시작이 부적합한지 검사
                                     byloop = len(parsed) #loopback에 의해 돌아왔을 때   
                                     parsed, wasparam = parse(start_str,param,parsed, False if wasparam is None else wasparam,begin,end)
+                                    
                                     sliceflag = False
-                                    if len(parsed) <= byloop:
+                                    if len(parsed) <= byloop: # ==해도 되는데 혹시몰라서
                                         byloop = usual
                                     else:
                                         sliceflag = True
@@ -1062,12 +1124,11 @@ def parse(string,param,parsed,wasparam, begin, end):
                                 # else:
                                 #     sliceflag = True
                                 byloop -= 1
-                                
-                                if len(parsed) != byloop+2: #자기 자신 루프인 경우는 제외하겠다는 것!
+                                if len(parsed) != byloop+2:#byloop+2: #자기 자신 루프인 경우는 제외하겠다는 것!
                                     if isinstance(parsed[usual][2],list):
-                                        parsed[usual][2][1][byloop] = parsed[byloop][2]
+                                        parsed[usual][2][1][byloop] = parsed[byloop+1][2]
                                     else:
-                                        parsed[usual][2] = [parsed[usual][2], {byloop: parsed[byloop][2]}]
+                                        parsed[usual][2] = [parsed[usual][2], {byloop: parsed[byloop+1][2]}]
                                 parsed=parsed[:byloop+1]
 
                             elif escaped_str == '':
@@ -1139,6 +1200,8 @@ def img2latex(filename):
     f= open("log.txt","a")
     f.write(str(datetime.datetime.now())+": "+_latex+'\n')
     f.close()
+    if _latex == '':
+        return r'\text{Failed\: To\:  Detect}'
     return _latex
 def center_align_img(img,size):
     if size is None:
@@ -1147,16 +1210,17 @@ def center_align_img(img,size):
     layer = Image.new('RGB', size, (255,255,255))
     layer.paste(img, tuple(map(lambda x: (x[0]-x[1])//2, zip(size, img.size))))
     return layer
-def latex2img(latex,x=0.001, y=0.001,size=50,imgsize=None,filename='output.png'):
+def latex2img(latex,x=0.001, y=0.001,size=50,imgsize=None,filename=None):
     #이함수는 맨처음 실행됐을때만 겁나게 느리다. 이유는 모르겠다.
     fig = plt.figure()
     plt.text(x, y, r"$%s$" % latex, fontsize = size)
     fig.patch.set_facecolor('white')
     plt.axis('off')
-    #plt.tight_layout()
+    plt.tight_layout()
 
     with io.BytesIO() as png_buf:
         plt.savefig(png_buf, bbox_inches='tight', pad_inches=0) #요거 1초 정도
+        plt.close(fig)
         png_buf.seek(0)
         image = Image.open(png_buf)
         image.load()
@@ -1164,8 +1228,10 @@ def latex2img(latex,x=0.001, y=0.001,size=50,imgsize=None,filename='output.png')
         cropped = image.crop(inverted_image.getbbox())
         if imgsize is not None:
             cropped = center_align_img(cropped,imgsize)
+        if filename is None:
+            return cropped
         cropped.save(filename)
-    plt.close(fig)
+
     
 def convertall(string,parsed_list,form_list,eval_list,priority_list,begin,end):
     global lendict
@@ -1205,7 +1271,7 @@ def convert(string,parsed_list,form_list,eval_list,priority_list,begin,end,row,f
                     param_list = param_list[0]
                 except:
                     raise MyException("Internal Critical Exception")
-                if len(param_list) > 1:
+                if not (len(parsed_list[ciridx]) == 2 and parsed_list[ciridx][1][0] == alphabet) and (len(param_list) > 1 or (len(param_list)==1 and len(param_list[0])>1)):
                     param_list = convert(param_list,parsed_list,form_list,eval_list,priority_list,begin,end,row)
                     return string[:i]+replace_parts(string[i:i+length],range_list,param_list)+ convert(string[i+length:],parsed_list,form_list,eval_list,priority_list,begin,end,row)
                 else:
@@ -1243,16 +1309,81 @@ def wannaconvert(wanna,symbs):
         wanna =wanna.replace('{'+str_list[i]+'}','|'.join(symbs[i]))
     return wanna
 
+def answerconvert(answer):
+    str_list = []
+    str_list.append(r'\left. \begin{array} { l }')
+    eqr = []
+    for ans in answer:
+        #ex ) ans : {X_0_0 : 1, X_0_0 : 2, X_0_0 : 3}
+        symb_val_dict = {}
+        matrix_flag_dict = dict([(i,False) for i in matrix_name_list])
+        for symb in ans:
+            #ex ) symb : X_0_0
+            flag = False
+            name = ''
+
+            for key in matrix_elems_dict:
+                #ex) key : 'A'
+                if symb in matrix_elems_dict[key]: # ex) X_0_0 in [ X_0_0,X_0_1,X_0_2] 
+                    name = key
+                    flag = True
+                    break 
+            
+            if flag:
+                if matrix_flag_dict[name] is False:
+                    symb_val_dict[name] = Matrix(symarray(name,matrix_size[name])).subs(ans)
+                    print(symb_val_dict[name])
+                    print(latex(symb_val_dict[name]))
+                    matrix_flag_dict[name] = True
+                else:
+                    pass
+            else:
+                symb_val_dict[symb] = ans[symb]
+        eqr.append(symb_val_dict)
+        
+            
+
+    str_list.append(r' \\ '.join([r',\, '.join(['{'+latex(j) + ' = '+latex(i[j])+'}' for j in i]) for i in eqr]))
+    str_list.append( r'\end{array} \right.')
+    
+    return ''.join(str_list)
+
 def interpret(sympyform, func = 0):
+    global eqr
     exec('eqr = '+sympyform,globals())
+    if isinstance(eqr,tuple):
+        eqr_system = []
+        for elem in eqr:
+            if isinstance(elem,str):
+                
+                val = eval(elem,globals())
+                if val is not None:
+                    eqr_system.append(val)
+            else:
+                eqr_system.append(elem)
+        eqr = eqr_system[0] if len(eqr_system) == 1 else eqr_system
     if type(eqr) in primitive:
         print("is_Primitive")
         answer = latex(eqr)
-    elif eqr.is_Relational:
+    elif isinstance(eqr, list):
+        print("is_System ",end='')
+        if func== 0: #선형방정식
+            print("linear")
+            answer = solve(eqr,dict=True)
+            answer = answerconvert(answer)
+            
+        elif func == 1: #미분방정식
+            print("derivative")
+            answer = latex(dsolve(eqr))
+        elif func == 2: #집합연산
+            print("set")
+            answer = latex(solveset(eqr))
+    elif hasattr(eqr,'is_Relational') and eqr.is_Relational:
         print("is_Relational ",end='')
         if func== 0: #선형방정식
             print("linear")
-            answer = latex(solve(eqr,dict=True))
+            answer = solve(eqr,dict=True)
+            answer = answerconvert(answer)
         elif func == 1: #미분방정식
             print("derivative")
             answer = latex(dsolve(eqr))
@@ -1272,61 +1403,39 @@ def interpret(sympyform, func = 0):
 
     return answer
 
-def getsymbs(complex_str, matrix_str, function_str):
-    try:
-        complex = list(filter( lambda x: x != '' ,complex_str.split(" ")))
-        matrix = list(filter( lambda x: x != '' ,matrix_str.split(" ")))
-        size_list = []
-        name_list = []
-        str_list = ['(',',',')']
-        i = 0
-        temp = ''
-        size = tuple()
-        for m in matrix:
-            while True:
-                idx = m.find(str_list[i])
-                if idx ==-1:
-                    temp += m
-                    break
-                else:   
-                    if i==0:
-                        name_list.append(temp+m[:idx])
-                        temp = ''
-                    elif i==1:
-                        size = int(temp+m[:idx])
-                        temp = ''
-                    elif i==2:
-                        size = (size, int(temp+m[:idx]))
-                        temp = ''
-                        size_list.append(size)
-                    i+=1
-                    i%=3
-                    m = m[idx+1:]
-                    if m == '':
-                        break
-        if i!=0:
-            raise Exception()
-        function = list(filter(lambda x: x != '',function_str.split(" ")))
-        return [complex, [name_list,size_list], function]
-    except:
-        raise MyException("ConFirm The Form")
-
-
 def init(begin,end,filename,symbs):
-    global begin_end_parsed,seperator,escaped_seperator, matrixsize
+    global begin_end_parsed,seperator,escaped_seperator,escaped_relationals, matrix_size,matrix_elems_dict,matrix_name_list
+    begin_end_parsed = []
+
+    #seperator 관련 변수 초기화
+    seperator = ['+','-',',']
+    escaped_seperator =[]
+    escaped_relationals = []
+    
+    #매트릭스 변수들 초기화
+    matrix_size = {}
+    matrix_elems_dict={}
+    matrix_name_list = []
     for relational in relationals:
         escaped_relationals.append(escape(relational,[begin,end]))
     escaped_seperator = argleft + argright + seperator + triangleseperator+ escaped_relationals
     seperator = argleft+argright+ seperator+ triangleseperator + relationals
     begin_end_parsed = [[[begin,None,True,None],[end,None,False,None]]]
     f = open(filename,'r',encoding='utf-8') 
-    exec(','.join(symbs[0]) + '='+ 'symbols(\''+' '.join(symbs[0])+'\')',globals())
-    exec(','.join(symbs[2]) + '='+ 'symbols(\''+' '.join(symbs[2])+'\',cls=Function)',globals())
-    #symbs[1]과 symbs[0]을 이용해 exec함... (symarray로)
-    matrixsize = symbs[1]
+    if symbs[0] != []:
+        exec(','.join(symbs[0]) + '='+ 'symbols(\''+' '.join(symbs[0])+'\')',globals())
+    if symbs[1][0] != [] and symbs[1][1] != []:
+        for name, size in zip(symbs[1][0],symbs[1][1]):
+            matrix_name_list.append(name)
+            matrix_size[name] = size
+            matrix_elems_dict[name] = reduce(operator.add, [list(i) for i in symarray(name,size)])
+
+    if symbs[2] != []:
+        exec(','.join(symbs[2]) + '='+ 'symbols(\''+' '.join(symbs[2])+'\',cls=Function)',globals())
     symbs[0] = symbs[0] + defaultcomplex
     symbs[1] = symbs[1][0] + defaultmatrix
     symbs[2] = symbs[2] + defaultfunction
+
     parsed_list = []
     form_list = []
     eval_list = []

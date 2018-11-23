@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QPixmap
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -26,9 +26,10 @@ class Ui_MainWindow(object):
         self.lbl_title.setObjectName("lbl_title")
         self.lbl_frame = QtWidgets.QLabel(self.centralwidget)
         self.lbl_frame.setGeometry(QtCore.QRect(5, 55, 790, 420))
-        self.lbl_frame.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.lbl_frame.setStyleSheet("background-color: rgb(255, 255, 255);") # 255 255
         self.lbl_frame.setText("")
         self.lbl_frame.setObjectName("lbl_frame")
+        
         self.btn_next = QtWidgets.QPushButton(self.centralwidget)
         self.btn_next.setGeometry(QtCore.QRect(745, 1, 49, 49))
         self.btn_next.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
@@ -36,24 +37,8 @@ class Ui_MainWindow(object):
         self.btn_next.setText("")
         self.btn_next.setObjectName("btn_next")
 
-        self.btn_next2 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_next2.setGeometry(QtCore.QRect(750, 390, 49, 49))
-        self.btn_next2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"border-image: url(:/icon/next.png);")
-        self.btn_next2.setText("")
-        self.btn_next2.setObjectName("btn_next2")
 
 
-        self.btn_next3 = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_next3.setGeometry(QtCore.QRect(10, 384, 63, 63))
-        self.btn_next3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n")
-        pixmap = QPixmap(".\\resources\\keyboard.png")
-        self.btn_next3.setIcon(QtGui.QIcon(pixmap.scaled(64, 64, QtCore.Qt.IgnoreAspectRatio)))
-        
-        self.btn_next3.setIconSize(QtCore.QSize(64, 64))
-        
-        self.btn_next3.setText("")
-        self.btn_next3.setObjectName("btn_next3")
 
 
         MainWindow.setCentralWidget(self.centralwidget)

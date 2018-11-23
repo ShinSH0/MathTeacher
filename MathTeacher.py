@@ -1,14 +1,28 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-import getImage, Camera, editImage, result, keyboard, loadImage
+from functools import partial
 
+from PIL import Image
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from functools import partial
+from PyQt5.QtWidgets import QDialog
+from PIL.ImageQt import ImageQt
+
+import Camera
+import editImage
+import getImage
+import keyboard
+import loadImage
+import popup
+import result
+import solved
+from Core import *
+
 
 # MainWindow 설정 및 콜백함수 선언을 위한 클래스
 class MyWindow(QtWidgets.QMainWindow):
 	def __init__(self):
 		super().__init__()
+
 		# 마우스 이벤트 등록
 		self.mousePressEvent = self.onClick
 		self.mouseReleaseEvent = self.onRelease
@@ -92,7 +106,8 @@ class MyWindow(QtWidgets.QMainWindow):
 			self.update()
 
 		if self.edit:
-			self.RubberBand.setGeometry(QtCore.QRect(self.originQPoint, event.pos()).normalized())
+			if not isinstance(self.RubberBand,int):
+				self.RubberBand.setGeometry(QtCore.QRect(self.originQPoint, event.pos()).normalized())
 
 	# 윈도우 그릴때 발생하는 이벤트
 	def paintEvent(self, e):
@@ -148,18 +163,26 @@ class MyWindow(QtWidgets.QMainWindow):
 			
 		
 	def save(self):	
-		currentQRect = self.RubberBand.geometry()
+		
+		currentQRect = self.RubberBand.geometry() if not isinstance(self.RubberBand,int) else QtCore.QRect(0, 0, 800, 400)
 		cropQPixmap = self.pixmap.copy(currentQRect)
 		cropQPixmap.save('output.png')
 
 
 # 사실상 메인함수
 class MathTeacher(object):
+	
 	def init(self):
+		latex2img('.') 
+		self.begin= '<'
+		
+		self.end = '>'
+		self.latex = ''
 		self.app = QtWidgets.QApplication(sys.argv)
 		self.MainWindow = MyWindow()
-
+		
 	    # GUI들 초기화
+		self.popup_ui =popup.Ui_Form()
 		self.getImage_ui = getImage.Ui_MainWindow()
 		self.Camera_ui = Camera.Ui_MainWindow()
 		self.editImage_ui = editImage.Ui_MainWindow()
@@ -167,12 +190,14 @@ class MathTeacher(object):
 		self.keyboard_ui = keyboard.Ui_MainWindow()
 		self.loadImage_ui = loadImage.Ui_MainWindow()
 		self.cutImage_ui = result.Ui_MainWindow()
+		self.solved_ui = solved.Ui_MainWindow()
 
-
+		
 	    # MainWindow에 getImage UI등록
 		self.getImage_ui.setupUi(self.MainWindow)
 		self.MainWindow.show()
-
+		
+	
 		self.m()
 
 		sys.exit(self.app.exec_())
@@ -188,6 +213,7 @@ class MathTeacher(object):
 	# 메인 UI 설정
 	def m(self):
 		# 버튼 설정
+		self.latex = ''
 		self.getImage_ui.btn_cam.clicked.connect(self.m2c)
 		self.getImage_ui.btn_edit.clicked.connect(self.m2e)
 		self.getImage_ui.btn_load.clicked.connect(self.m2l)
@@ -198,17 +224,49 @@ class MathTeacher(object):
 		self.MainWindow.frame = 0
 		self.MainWindow.mode = 0
 		self.MainWindow.pixmap = 0
+	#PIL IMage를 QPixmap 형으로 바꿈
+	def Image2QPixmap(self,image):
+		return QPixmap.fromImage(ImageQt(image.convert("RGBA")))
 
+
+	#dialog check handler
+	def dcheck(self):
+		self.my_dialog.close()
+
+	#dialog close event
+	def dclose(self,evnt):
+		self.complex = self.popup_ui.lineEdit.text()
+		self.matrix = self.popup_ui.lineEdit_2.text()
+		self.function = self.popup_ui.lineEdit_3.text()
+		self.solver = self.popup_ui.comboBox.currentText()
+		self.symbs = getsymbs(self.complex,self.matrix,self.function)
+		self.parsed_list,self.form_list,self.eval_list,self.priority_list = init(self.begin,self.end,"setting.txt",self.symbs)
+		try:
+			#latex를 sympyform으로 변환
+			self.sympyform = convertall(self.latex,self.parsed_list,self.form_list,self.eval_list,self.priority_list,self.begin,self.end)
+			#sympyform을 해석함
+			
+			print("Equation: ",self.sympyform)
+			self.interpreted = interpret(self.sympyform)
+			print("Interpreted: ",self.interpreted)
+			#해석한 것을 이미지로 만듦
+			
+			self.solved_img = latex2img(self.interpreted,imgsize= (785,365))
+		except:
+			#오류시 Solve Failed 출력
+			self.solved_img = latex2img(r'\text{Failed\: To\:  Solve}',imgsize= (785,365))
+		self.changeUI(self.result_ui, self.solved_ui)
+		self.s()
 	# 카메라 UI 설정
 	def c(self):
 		self.Camera_ui.btn_back.clicked.connect(self.c2m)
 		self.Camera_ui.btn_capture.clicked.connect(self.Camera_ui.capture)
 		self.Camera_ui.btn_next.clicked.connect(self.c2cu)
-
-
+		
 	# 그림판 UI 설정
 	def e(self):
 		self.editImage_ui.btn_back.clicked.connect(self.e2m)
+		self.editImage_ui.btn_next.clicked.connect(self.e2r)
 		self.editImage_ui.btn_pen.clicked.connect(partial(self.switchTool, 0))
 		self.editImage_ui.btn_erase.clicked.connect(partial(self.switchTool, 1))
 
@@ -219,6 +277,10 @@ class MathTeacher(object):
 	# 결과창 UI 설정
 	def r(self):
 		self.result_ui.btn_next.clicked.connect(self.r2m)
+		self.result_ui.btn_next2.clicked.connect(self.r2s)
+		self.result_ui.btn_next3.clicked.connect(self.r2t)
+		
+		self.result_ui.lbl_frame.setPixmap(self.Image2QPixmap(self.latex_img))
 		self.MainWindow.edit = 0
 
 	# 이미지 불러오기 UI 설정
@@ -227,14 +289,24 @@ class MathTeacher(object):
 		self.loadImage_ui.btn_dir.clicked.connect(self.openFileDialog)
 		self.loadImage_ui.btn_next.clicked.connect(self.l2cu)
 
+	# 풀이화면 UI설정
+	def s(self):
+		self.solved_ui.btn_next.clicked.connect(self.s2m)
+	
+		
+		self.solved_ui.lbl_frame.setPixmap(self.Image2QPixmap(self.solved_img))
+
 	# 직접입력 UI 설정
 	def t(self):
+		self.keyboard_ui.text_equation.setText(self.latex)
 		self.keyboard_ui.btn_back.clicked.connect(self.t2m)
+		self.keyboard_ui.btn_next.clicked.connect(self.t2r)
 
 	def cu(self):
 		self.cutImage_ui.btn_next.clicked.connect(self.cu2m)
 		self.cutImage_ui.btn_next2.clicked.connect(self.cu2r)
 		self.cutImage_ui.lbl_frame.setPixmap(self.MainWindow.pixmap)
+		self.cutImage_ui.btn_next3.hide()
 		self.MainWindow.edit = 1
 		self.MainWindow.mode = 1
 
@@ -243,7 +315,6 @@ class MathTeacher(object):
 		self.changeUI(self.getImage_ui, self.Camera_ui)
 		self.c()
 		self.Camera_ui.th.start()
-
 	# main -> edit
 	def m2e(self):
 		self.changeUI(self.getImage_ui, self.editImage_ui)
@@ -276,7 +347,14 @@ class MathTeacher(object):
 	def e2m(self):
 		self.changeUI(self.editImage_ui, self.getImage_ui)
 		self.m()
-
+	#edit -> result
+	def e2r(self):
+		self.MainWindow.save()
+		self.latex = img2latex('output.png')
+		self.latex = displaysetting(self.latex)
+		self.latex_img = latex2img(self.latex,imgsize= (785,365))
+		self.changeUI(self.editImage_ui, self.result_ui)
+		self.r()
 	# load -> main
 	def l2m(self):
 		self.changeUI(self.loadImage_ui, self.getImage_ui)
@@ -284,32 +362,69 @@ class MathTeacher(object):
 
 	# load -> cutImage
 	def l2cu(self):
-		pixmap = QPixmap(self.filename[0])
-		self.MainWindow.pixmap = pixmap.scaled(790, 420, QtCore.Qt.IgnoreAspectRatio)
+		if not hasattr(self,'filename'):
+			return
 
+		#pixmap = QPixmap(self.filename[0])
+		#self.MainWindow.pixmap = pixmap.scaled(790, 420, QtCore.Qt.IgnoreAspectRatio)
+		
+		self.MainWindow.pixmap = self.Image2QPixmap(center_align_img(Image.open(self.filename[0]),(785,365)))
 		self.changeUI(self.loadImage_ui, self.cutImage_ui)
 		self.cu()
-		
+	
+
 	# type -> main
 	def t2m(self):
 		self.changeUI(self.keyboard_ui, self.getImage_ui)
 		self.m()
+
+	# type -> result:
+	def t2r(self):
+		self.latex = self.keyboard_ui.text_equation.toPlainText()
+		self.latex = displaysetting(self.latex)
+		self.latex_img = latex2img(self.latex,imgsize= (785,365))
+		self.changeUI(self.keyboard_ui, self.result_ui)
+		self.r()
 
 	# result -> main
 	def r2m(self):
 		self.changeUI(self.result_ui, self.getImage_ui)
 		self.m()
 
+	# result -> type
+	def r2t(self):
+		self.changeUI(self.result_ui, self.keyboard_ui)
+		self.t()
+
 	# cutImage -> main
 	def cu2m(self):
 		self.changeUI(self.cutImage_ui, self.getImage_ui)
 		self.m()
 
+	#result -> solved
+	def r2s(self):
+
+		# Dialog 띄우기
+		self.my_dialog = QDialog()
+		self.my_dialog.setModal(True)
+		self.my_dialog.closeEvent = self.dclose
+		self.popup_ui.setupUi(self.my_dialog)
+		self.popup_ui.pushButton.clicked.connect(self.dcheck)
+		self.my_dialog.show()
+		
+		
 	#cutImage -> result
 	def cu2r(self):
 		self.MainWindow.save()
+		self.latex = img2latex('output.png')
+		self.latex = displaysetting(self.latex)
+		self.latex_img = latex2img(self.latex,imgsize= (785,365))
 		self.changeUI(self.cutImage_ui, self.result_ui)
 		self.r()
+	#solved -> main
+	def s2m(self):
+		self.changeUI(self.solved_ui,self.getImage_ui)
+		self.m()
 
 	# 그림판 모드 변경
 	def switchTool(self, mode):
@@ -324,12 +439,10 @@ class MathTeacher(object):
 		file_dialog.selectNameFilter("Images (*.png *.jpg)")
 		if file_dialog.exec_():
 			self.filename = file_dialog.selectedFiles()
-		self.loadImage_ui.txt_dir.setText(self.filename[0])
+			self.loadImage_ui.txt_dir.setText(self.filename[0])
 
 if __name__ == "__main__":
 	import sys
 	
 	MT = MathTeacher()
 	MT.init()
-
-	

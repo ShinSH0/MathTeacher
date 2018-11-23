@@ -1,0 +1,16 @@
+'\operatorname { lim }' -> '\lim ' == 연산자 이름 
+False
+p
+\\o\peratorname< *1~>{< *0~>p< *0~>}
+{
+}
+\\{0} 
+0
+'\lim _ { 3 }' -> '\lim \limits _ { 3 }' == 대형연산자 플레이스타일    ================================= limits 추가
+False
+p
+\\<lim|sum|prod>< *1~>_< *1~>{p}
+{
+}
+\\{0} \\limits _ \{{1}\}
+4

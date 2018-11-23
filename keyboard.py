@@ -37,7 +37,7 @@ class Ui_MainWindow(object):
         'Space' : 6,
         'Subscript' : 4,
         'Sum' : 12,
-        'Symbol' : 15,
+        'Symbol' : 16,
         'Triangle Function' : 6
         }
 
@@ -87,7 +87,7 @@ class Ui_MainWindow(object):
         self.text_equation.setGeometry(QtCore.QRect(10, 230, 581, 221))
         self.text_equation.setStyleSheet("background-color: rgb(250, 250, 250);")
         self.text_equation.setObjectName("text_equation")
-
+    
         x, y = 10, 60
         width, height = 63, 75
         ascX, ascY = 68, 80
@@ -249,7 +249,7 @@ class Ui_MainWindow(object):
     def addText(self, str_folder, idx):
         info = MTlist.getInfo(str_folder, idx)
         #self.text_equation.append(info[0])
-        self.append_(info[0])
+        self.append_(info[1],info[2])
 
     # 버튼 선택 패널의 페이지 이동 버튼이 눌러졌을때
     # page : 1이 들어오면 다음 페이지 -1이 들어오면 이전 페이지
@@ -262,8 +262,11 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.lbl_title.setText(_translate("MainWindow", "MathTeacher"))
 
-    def append_(self, strstr):
+    def append_(self, strstr,cursorback=0):
         self.text_equation.insertPlainText( strstr)
+        cursor = self.text_equation.textCursor()
+        cursor.setPosition(cursor.anchor()-cursorback)
+        self.text_equation.setTextCursor(cursor)
         self.raise2()
 
     def raise2(self, widget=None):

@@ -25,7 +25,7 @@ latexdict = {
     [
         r'\frac { \sqrt { \square } }{ \sqrt { \square } } ',
         [r'\sqrt { \square }', r'\sqrt {  }', len_1],
-        [r'\sqrt { \square }', r'\sqrt [  ]{  }', len_2],
+        [r'\sqrt [ \square ]{ \square }', r'\sqrt [  ]{  }', len_2],
         [r'\frac { \square }{ \square }', r'\frac {  }{  }', len_2],
         [r'\frac { \sqrt { \square } }{ \sqrt { \square } }',  r'\frac { \sqrt {  } }{ \sqrt {  } }', len(r'} }{ \sqrt {  } }')]
     ],
@@ -78,17 +78,17 @@ latexdict = {
     [
         r'\sum \limits _{ \square }^{ \square }',
         [r'\sum ', r'\sum ', len_0],
-        [r'\sum \limits _{ \square }^{ \square }', r'\sum _{  }^{  }', len_2+1],
+        [r'\sum \limits _{ \square }^{ \square }', r'\sum \limits _{  }^{  }', len_2+1],
         [r'\prod ', r'\prod ', len_0],
-        [r'\prod \limits _{ \square }^{ \square }', r'\prod _{  }^{  }', len_2+1],
+        [r'\prod \limits _{ \square }^{ \square }', r'\prod \limits _{  }^{  }', len_2+1],
         [r'\bigcup ', r'\bigcup ', len_0],
-        [r'\bigcup \limits _{ \square }^{ \square }', r'\bigcup _{  }^{  }', len_2+1],
+        [r'\bigcup \limits _{ \square }^{ \square }', r'\bigcup \limits _{  }^{  }', len_2+1],
         [r'\bigcap ', r'\bigcap ', len_0],
-        [r'\bigcap \limits _{ \square }^{ \square }', r'\bigcap _{  }^{  }', len_2+1],
+        [r'\bigcap \limits _{ \square }^{ \square }', r'\bigcap \limits _{  }^{  }', len_2+1],
         [r'\bigvee ', r'\bigvee ', len_0],
-        [r'\bigvee \limits _{ \square }^{ \square }', r'\bigvee _{  }^{  }', len_2+1],
+        [r'\bigvee \limits _{ \square }^{ \square }', r'\bigvee \limits _{  }^{  }', len_2+1],
         [r'\bigwedge ', r'\bigwedge ', len_0],
-        [r'\bigwedge \limits _{ \square }^{ \square }', r'\bigwedge _{  }^{  }', len_2+1]
+        [r'\bigwedge \limits _{ \square }^{ \square }', r'\bigwedge \limits _{  }^{  }', len_2+1]
     ],
     "Triangle Function":
     [
@@ -246,7 +246,8 @@ latexdict = {
     ],
     "Array":
     [
-        r'\begin{array} { l } \cdots \\ \cdots \end{array}'
+        r'\begin{array} { l } \cdots \\ \cdots \end{array}',
+        [r'\begin{array} { l } \cdots \\ \cdots \end{array}',r'\begin{array}  \end{array}', len(r' \end{array}')]    
     ]
 
 }

@@ -57,7 +57,7 @@ class Ui_MainWindow(object):
         self.btn_dir.setObjectName("btn_dir")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(20, 180, 451, 261))
-        self.label.setStyleSheet("background-color: rgb(250, 250, 250);\n"
+        self.label.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "")
         self.label.setText("")
         self.label.setObjectName("label")

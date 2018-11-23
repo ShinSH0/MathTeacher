@@ -1,0 +1,368 @@
+'\operatorname { lim }' -> '\lim ' == 연산자 이름 
+False
+p
+\\o\peratorname< *1~>{< *0~>p< *0~>}
+{
+}
+\\{0} 
+0
+'\text { if } x \geq 0}' -> '\text { if } Ge(x,0)'
+False
+p
+\\text< *1~>{< *0~>if< *0~>}p\\geq p}
+{
+}
+Ge({0},{1})\}
+0
+'\text { if } x \leq 0}' -> '\text { if } Ge(x,0)'
+False
+p
+\\text< *1~>{< *0~>if< *0~>}p\\leq p}
+{
+}
+Le({0},{1})\}
+0
+'\text { if } x = 0}' -> '\text { if } Eq(x,0)'
+False
+p
+\\text< *1~>{< *0~>if< *0~>}p=p}
+{
+}
+Eq({0},{1})\}
+0
+'\text { if } x > 0}' -> '\text { if } Lt(x,0)'
+False
+p
+\\text< *1~>{< *0~>if< *0~>}p\>p}
+{
+}
+Gt({0},{1})\}
+0
+'\text { if } x > 0}' -> '\text { if } Gt(x,0)'
+False
+p
+\\text< *1~>{< *0~>if< *0~>}p\<p}
+{
+}
+Lt({0},{1})\}
+0
+'\frac {1}{2}' -> '(1)/(2)'========================================================== 루트 및 분수 꼴 처리 단계
+False
+p
+\\frac< *1~><{Argleft}>p<{Argright}>< *0~><{Argleft}>p<{Argright}>
+{
+}
+(({1})/({4}))
+1
+'\sqrt { x }' -> 'sqrt(x)' == 루트
+False
+p
+\\sqrt< *1~><{Argleft}>p<{Argright}>
+{
+}
+sqrt({1})
+1
+Matrix 변환 \left( ~ \right) -> 'Matrix([ ~ ])'   === 매트릭스 변환 ===============================  매트릭스 꼴 변환
+True
+p
+\\left(< *0~>\\begin{array}< *0~>{p}<'<'< *0~><{Argleft}>p<{Argright}>< *0~>'&...>'\\\\...>\\end{array}< *0~>\\right)
+{
+}
+(r"Matrix("+str([(lambda x: [x] if isinstance(x,str) else list(x))(itemgetter(*range(1,len(i),3))(i)) for i in {1}])+")").replace("'","")
+2
+Case 변환 \left( ~ \right) -> 'Matrix([ ~ ])'   === 케이스 변환
+True
+p
+\\left\\{< *0~>\\begin{array}< *0~>{p}<'<'< *0~><{Argleft}>p<{Argright}>< *0~>&< *0~><{Argleft}>p<{Argright}>< *0~>'&...>'\\\\...>\\end{array}< *0~>\\right.
+{
+}
+'Piecewise('+','.join(['('+j[0]+','+j[1]+')' for j in [(lambda x: [x] if isinstance(x,str) else list(x))(itemgetter(*range(1,len(i),3))(i)) for i in {1}]])+')'
+2
+System 변환 \left\{ ~ \right. -> '[ ~ ]'   === 연립방정식 변환
+True
+p
+\\left\\{< *0~>\\begin{array}< *0~>{p}<'<'< *0~><{Argleft}>p<{Argright}>< *0~>'&...>'\\\\...>\\end{array}< *0~>\\right.
+{
+}
+str([[i[1]] for i in {1}]).replace("'","")
+2
+Matrix 변환 \left. ~ \right. -> 'lines()'   === 여러줄 변환
+True
+p
+\\left.< *0~>\\begin{array}< *0~>{p}<'<'< *0~><{Argleft}>p<{Argright}>< *0~>'&...>'\\\\...>\\end{array}< *0~>\\right.
+{
+}
+str([[i[1]] for i in {1}])
+2
+'\int _ { 0 } ^ { 1 } x exp( 2 * x -1 ) d x' -> 'integrate(x * exp(2  * x - 1 ), (x, 0, 1))'  ==== 적분  ============ 적분 꼴 변환 
+False
+p
+\\int< *1~>_< *0~>{p}< *0~>^< *0~>{p}pd< *0~><{Complex}>
+{
+}
+integrate({2}, ({3},{0},{1}))
+3
+'\int x exp( 2 * x -1 ) d x' -> 'integrate(x * exp(2  * x - 1 ), x)'  ==== 적분2
+False
+p
+\\int< *1~>pd< *0~><{Complex}>
+{
+}
+integrate({0}, {1})
+3
+'\lim _ { 3 }' -> '\lim \limits _ { 3 }' == 대형연산자 플레이스타일    ================================= limits 추가
+False
+p
+\\<lim|sum|prod>< *1~>_< *1~>{p}
+{
+}
+\\{0} \\limits _ \{{1}\}
+4
+'limits(x,x,3,'+') '' ================ 극한 1=========================================================== 대형 연산자 꼴의 함수 처리 단계  
+False
+p
+\\lim< *1~>\\limits< *1~>_< *0~>{p<\rightarrow |\to >p<+|->< *0~>}< *0~><{Argleft}>p<{Argright}>
+{
+}
+limit({5},{0},{2},'{3}')
+5
+'limits(x,x,3,'+') '' ================ 극한 2
+False
+p
+\\lim< *1~>\\limits< *1~>_< *0~>{p<\rightarrow |\to >p}< *0~><{Argleft}>p<{Argright}>
+{
+}
+limit({4},{0},{2})
+5
+'limits(x,x,3,'+') ''  ================ 극한 3
+True
+p
+\\lim< *1~>\\limits< *1~>_< *0~>{p<\rightarrow |\to >p<+|->< *0~>}p<<{Relational}>*0~1>
+{
+}
+r'limit({4},{0},{2},'+r"'{3}'"+')'+{5}[0] if len({5}) == 1 else r'limit({4},{0},{2},'+r"'{3}'"+')'
+5 
+'limits(x,x,3,'+') ''   ================ 극한 4
+True
+p
+\\lim< *1~>\\limits< *1~>_< *0~>{p<\rightarrow |\to >p}p<<{Relational}>*0~1>
+{
+}
+r'limit({3},{0},{2})'+{4}[0] if len({4}) == 1 else r'limit({3},{0},{2})'
+5
+'\\sum _ { k = 1 } ^ { 5 } (kx + 5)' -> 'Sum(kx + 5, (k,1,5))' ===== 급수1     8
+False
+p
+\\sum< *1~>\\limits< *1~>_< *0~>{p=p}< *0~>^< *0~>{p}< *0~><{Argleft}>p<{Argright}>
+{
+}
+Sum({4},({0},{1},{2})).doit()
+5
+'\\sum _ { k = 1 } ^ { 5 } (kx + 5)' -> 'Sum(kx + 5, (k,1,5))' ===== 급수2
+True
+p
+\\sum< *1~>\\limits< *1~>_< *0~>{p=p}< *0~>^< *0~>{p}p<<{Relational}>*0~1>
+{
+}
+r'Sum({3},({0},{1},{2})).doit()'+ {4}[0] if len({4}) == 1 else r'Sum({3},({0},{1},{2})).doit()' 
+5
+'\\prod _ { k = 1 } ^ { 5 } (kx + 5)' -> 'Product(kx + 5, (k,1,5))' ===== 수열의곱(?)1       10
+False
+p
+\\\prod< *1~>\\limits< *1~>_< *0~>{p=p}< *0~>^< *0~>{p}< *0~><{Argleft}>p<{Argright}>
+{
+}
+Product({4},({0},{1},{2})).doit()
+5
+'\\prod _ { k = 1 } ^ { 5 } (kx + 5)' -> 'Product(kx + 5, (k,1,5))' ===== 수열의곱(?)2
+True
+p
+\\\prod< *1~>\\limits< *1~>_< *0~>{p=p}< *0~>^< *0~>{p}p<<{Relational}>*0~1>
+{
+}
+'Product({3},({0},{1},{2})).doit()'+{4}[0] if len({4}) == 1 else 'Product({3},({0},{1},{2})).doit()' + {4}[1]
+5
+'2 ^ { 2 }' -> '2 ** (2)' ==== 제곱              =================================================== 첨자 꼴 변환
+False
+p
+^< *0~>{p}
+{
+}
+** ({0})
+1
+'\sin ( x + 1 )' -> 'sin( x + 1 )' == 함수들 1          ===============================    삼각 및 로그 함수 처리 단계 
+False
+p
+\\<{Function}>< *1~><{Argleft}>p<{Argright}>
+{
+}
+{0}({2})
+8
+'\sin x ' -> 'sin( x )' == 함수들 2
+True
+p
+\\<{Function}> p<<{Seperator}>*0~1>
+{
+}
+r'{0}( {1})'+ {2}[0] if len({2}) == 1 else r'{0}( {1})'
+8
+'(y + 1) x' -> '(y + 1) * x'  ==== 괄호 * 함수   ==============================================  함수 곱하기 꼴
+False
+p
+<{Argleft}>p<{Argright}>< *0~><{Function}>< *0~><{Argleft}>p<{Argright}>
+{
+}
+({1}) * {3}({5})
+7
+'3 f(x)' -> '3 * f(x)' ==== 숫자 * 함수 
+True
+p
+<<0-9>*1~>< *0~><{Function}>< *0~><{Argleft}>p<{Argright}>
+{
+}
+''.join({0}) + r' * {1}({3})'
+7
+'(y + 1) x' -> '(y + 1) * x'  ==== 미지수 * 함수
+False
+p
+<{Complex}|{Matrix}>< *0~><{Function}>< *0~><{Argleft}>p<{Argright}>
+{
+}
+{0} * {1}({3})
+7
+Matrix -> Matrix  ====          Function 보존 (함수이름만)    ==================================================== 중간 보존 꼴
+True
+p
+<<{Function}>*1~1>
+{
+}
+{0}[0]
+8.5
+Matrix() -> Matrix()  ====          Function 보존 (함수전체)  
+False
+p
+<{Function}><{Argleft}>p<{Argright}>
+{
+}
+{0}({2})
+7.5
+'(y + 1) x' -> '(y + 1) * x'  ==== 괄호 * 미지수      =============================================== 미지수 곱하기 꼴
+False
+p
+<{Argleft}>p<{Argright}>< *0~><{Complex}|{Matrix}>
+{
+}
+({1}) * {3}
+9
+'3 x' -> '3 * x' ==== 숫자 * 미지수 
+True
+p
+<<0-9>*1~>< *0~><{Complex}|{Matrix}>
+{
+}
+''.join({0}) + r' * {1}'
+9
+'x (y + 1)' -> 'x * (y + 1)' ==== 미지수 * 괄호
+False
+p
+<{Complex}|{Matrix}>< *0~><{Argleft}>p<{Argright}>
+{
+}
+{0} * ({2})
+9
+'(x+1) (x) (x+3) ' -> '(x+1) * (x) * (x+3)'==== 괄호 * 괄호 ============================================= 연산자 처리 단계 2
+True
+p
+<{Argleft}>p<{Argright}><< *0~><{Argleft}>p<{Argright}>*1~>
+{
+}
+' * '.join(['('+i+')' for i in ['{1}']+(lambda x: [x] if isinstance(x,str) else list(x))(itemgetter(*range(1,len({3}),3))({3}))])
+9
+'x y' -> 'x * y' ================ 미지수 * 미지수
+True
+p
+<{Complex}|{Matrix}><< *0~><{Complex}|{Matrix}>*1~>
+{
+}
+' * '.join(['{0}']+{1})
+9
+'\infty '-> 'oo ' === 무한 ===================================================================== 문자 처리 단계
+False
+p
+\\infty 
+{
+}
+oo 
+10
+'\times ' -> '* ' ===== 곱하기
+False
+p
+\\times 
+{
+}
+* 
+10
+'[f(x) : = x**2]' -> ['def f(x) : return x**2']  ============================================================================= 관계식 꼴 변환
+False
+p
+'p:< *0~>=p'
+{
+}
+'exec(r"def {0}: return {1}")'
+11
+'[ a = b ] -> [Eq(a,b)] '  ======== 연립방정식 등호               
+False
+p
+[p=p]
+{
+}
+Eq({0},{1})
+13.5
+'a = b' -> 'Eq(a,b)'  ======== 일반 등호 
+True
+p
+<'p'=...>
+{
+}
+{0}[0] if len({0}) < 2 else '['+','.join(['Eq(' +{0}[i]+','+{0}[i+1]+')' for i in range(len({0})-1)])+']'
+11
+'1' -> 'S(1)' ===========  숫자 꼴 변환 =========================================================== 강제함수 변활꼴
+True
+p
+<<0-9>*1~>
+{
+}
+'S('+''.join({0})+')'
+12
+'e' -> 'exp(1)' ==== 자연상수 
+False
+p
+e
+{
+}
+exp(1)
+12
+'(x)' -> '(x)'  괄호꼴 변환 ================================     괄호꼴 변환
+False
+p
+<{Argleft}>p<{Argright}>
+{
+}
+({1})
+13
+'X' -> 'Matrix(symarray('X',(3,3)))'=============================================== 매트릭스 변수 변환
+True
+p
+<{Matrix}>
+{
+}
+r"Matrix(symarray('{0}',"+str(matrix_size['{0}'])+"))"
+14
+\times -> \times ===== 그리스 문자 꼴 보존 =========================================== 보존단계
+True
+p
+\\<<{Alphabet}>*1~>
+{
+}
+'\\\\'+''.join({0})
+5.5
