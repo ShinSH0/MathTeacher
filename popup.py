@@ -24,14 +24,14 @@ class Ui_Form(object):
         self.lineEdit.setGeometry(QtCore.QRect(100, 86, 261, 31))
         self.lineEdit.setStyleSheet("font: 75 11pt \"Arial\";\n"
 "background-color: rgb(255, 255, 255);")
-        self.lineEdit.setText("")
+        self.lineEdit.setText("x y z k m n")
         self.lineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit.setObjectName("lineEdit")
         self.lineEdit_2 = QtWidgets.QLineEdit(Form)
         self.lineEdit_2.setGeometry(QtCore.QRect(100, 142, 261, 31))
         self.lineEdit_2.setStyleSheet("font: 75 11pt \"Arial\";\n"
 "background-color: rgb(255, 255, 255);")
-        self.lineEdit_2.setText("")
+        self.lineEdit_2.setText("A(3,3) B(3,3)")
         self.lineEdit_2.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.label_3 = QtWidgets.QLabel(Form)
@@ -45,7 +45,7 @@ class Ui_Form(object):
         self.lineEdit_3.setGeometry(QtCore.QRect(100, 198, 261, 31))
         self.lineEdit_3.setStyleSheet("font: 75 11pt \"Arial\";\n"
 "background-color: rgb(255, 255, 255);")
-        self.lineEdit_3.setText("")
+        self.lineEdit_3.setText("f g h")
         self.lineEdit_3.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.label_4 = QtWidgets.QLabel(Form)
@@ -67,6 +67,7 @@ class Ui_Form(object):
         self.comboBox.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.comboBox.setIconSize(QtCore.QSize(16, 16))
         self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItems(['solve','solveset','dsolve'])
         self.lbl_title = QtWidgets.QLabel(Form)
         self.lbl_title.setGeometry(QtCore.QRect(0, 0, 400, 50))
         self.lbl_title.setStyleSheet("background-color: rgb(100, 178, 244);\n"

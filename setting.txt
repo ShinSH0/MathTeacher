@@ -92,7 +92,7 @@ p
 \\left.< *0~>\\begin{array}< *0~>{p}<'<'< *0~><{Argleft}>p<{Argright}>< *0~>'&...>'\\\\...>\\end{array}< *0~>\\right.
 {
 }
-str([[i[1]] for i in {1}])
+str([[i[1]] for i in {1}]).replace("\\\\\\\\","\\\\")
 2
 '\int _ { 0 } ^ { 1 } x exp( 2 * x -1 ) d x' -> 'integrate(x * exp(2  * x - 1 ), (x, 0, 1))'  ==== 적분  ============ 적분 꼴 변환 
 False
@@ -124,7 +124,7 @@ p
 \\lim< *1~>\\limits< *1~>_< *0~>{p<\rightarrow |\to >p<+|->< *0~>}< *0~><{Argleft}>p<{Argright}>
 {
 }
-limit({5},{0},{2},'{3}')
+limit({5},{0},{2},"{3}")
 5
 'limits(x,x,3,'+') '' ================ 극한 2
 False
@@ -140,7 +140,7 @@ p
 \\lim< *1~>\\limits< *1~>_< *0~>{p<\rightarrow |\to >p<+|->< *0~>}p<<{Relational}>*0~1>
 {
 }
-r'limit({4},{0},{2},'+r"'{3}'"+')'+{5}[0] if len({5}) == 1 else r'limit({4},{0},{2},'+r"'{3}'"+')'
+r'limit({4},{0},{2},'+r'"{3}"'+')'+{5}[0] if len({5}) == 1 else r'limit({4},{0},{2},'+r'"{3}"'+')'
 5 
 'limits(x,x,3,'+') ''   ================ 극한 4
 True

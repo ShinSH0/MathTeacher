@@ -110,3 +110,6 @@
 2018-11-23 15:14:32.878876: \left( \begin{array} { c c c } { 2 } & { 3 } & { - 2 } \\ { 1 } & { 0 } & { - 4 } \\ { 2 } & { - 1 } & { - 6 } \end{array} \right) \left( \begin{array} { l } { x } \\ { y } \\ { z } \end{array} \right) = \left( \begin{array} { l } { 8 } \\ { 1 } \\ { 4 } \end{array} \right)
 2018-11-23 19:47:31.554566: \left( \begin{array} { c c c } { 2 } & { 3 } & { - 2 } \\ { 1 } & { 0 } & { - 4 } \\ { 2 } & { - 1 } & { - } \end{array} \right) \left( \begin{array} { c } { x } \\ { y } \\ { 2 } \end{array} \right) = \left( \begin{array} { l } { 8 } \\ { 4 } \end{array} \right)
 2018-11-23 19:50:14.708036: A \left( \begin{array} { l } { 5 } \\ { 0 } \\ { 1 } \end{array} \right) = \left( \begin{array} { l } { 8 } \\ { 1 } \\ { 4 } \end{array} \right)
+2018-11-23 20:22:26.904913: \operatorname { lim } _ { x \rightarrow 0 } \frac { \operatorname { sin } x } { x }
+2018-11-23 20:30:49.658968: \left( \begin{array} { c c } { 3 } & { 2 } \\ { - 1 } & { - 3 } \end{array} \right) X = \left( \begin{array} { c c } { - 3 } & { - 2 } \\ { 5 } & { 1 } \end{array} \right)
+2018-11-23 20:32:51.141177: \left( \begin{array} { c c } { 3 } & { - 2 } \\ { - 1 } & { - 3 } \end{array} \right) \times - \left( \begin{array} { r r } { - 3 } & { - 2 } \\ { 5 } & { 1 } \end{array} \right)
