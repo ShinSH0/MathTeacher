@@ -1513,7 +1513,7 @@ image: url(:/op/op11_5.PNG);</string>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="resources/back_arrow.qrc"/>
+  <include location="resources/back_arrow_rc.qrc"/>
  </resources>
  <connections>
   <connection>
