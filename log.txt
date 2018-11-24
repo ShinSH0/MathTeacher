@@ -113,3 +113,7 @@
 2018-11-23 20:22:26.904913: \operatorname { lim } _ { x \rightarrow 0 } \frac { \operatorname { sin } x } { x }
 2018-11-23 20:30:49.658968: \left( \begin{array} { c c } { 3 } & { 2 } \\ { - 1 } & { - 3 } \end{array} \right) X = \left( \begin{array} { c c } { - 3 } & { - 2 } \\ { 5 } & { 1 } \end{array} \right)
 2018-11-23 20:32:51.141177: \left( \begin{array} { c c } { 3 } & { - 2 } \\ { - 1 } & { - 3 } \end{array} \right) \times - \left( \begin{array} { r r } { - 3 } & { - 2 } \\ { 5 } & { 1 } \end{array} \right)
+2018-11-23 21:18:43.680170: \left( \begin{array} { c c } { 3 } & { 2 } \\ { - 1 } & { - 3 } \end{array} \right) x = \left( \begin{array} { l l } { 2 } & { 3 } \\ { 1 } & { 6 } \end{array} \right)
+2018-11-23 21:19:40.609292: x ^ { 2 } - 3 + 5 x = 0
+2018-11-23 21:20:54.660108: \left\{ \begin{array} { l } { x ^ { 2 } + y ^ { 2 } = 19 } \\ { x + 2 y = 21 } \end{array} \right.
+2018-11-23 21:22:07.361018: \left. \begin{array} { c } { f ( x ) : = 2 x ^ { 2 } + 3 } \\ { \int _ { 0 } ^ { 3 } f ( x ) d x } \end{array} \right.
