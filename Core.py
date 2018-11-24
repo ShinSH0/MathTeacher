@@ -31,7 +31,7 @@ argright=['}',']',')'] #닫는 괄호들의 리스트
 maximum_call = 2
 img2latex_call = 0
 lendict = {} #getlen을 메모이제이션으로 구현하기 위해 필요한 변수, lendict가 있어서 getlen의 시간복잡도가 O(len(string)*len(parsed_list))가 된다.
-
+paramdict = {} #getparam을 메모이제이션으로 구현하기 위해 필요한 변수 , 1~2초 차이 밖에 안난다 ㅠㅠ
 trianglefunction = ['sin','cos','tan','csc'] #삼각함수들
 relationalfunction = ['Eq','Ge','Le','Gt','Lt']
 pythonfunction = ['def','exec','return'] 
@@ -55,6 +55,7 @@ matrix_name_list = []
 matrix_size = {}
 matrix_elems_dict ={}
 
+wasmemorized = False
 
 
 # 커스텀 Exception의 메시지는 에러의 발생원인을 잘 담고 있어서 유지보수가 쉽다.
@@ -62,12 +63,6 @@ class MyException(Exception):
     def __init__(self, msg):
         self.msg = msg
 def getsymbs(complex_str, matrix_str, function_str):
-    """d 
-    
-    Arguments:
-        matrix_str {[type]} -- [description]
-        function_str {[type]} -- [description]
-    """
     complex = list(filter( lambda x: x != '' ,complex_str.split(" ")))
     matrix = list(filter( lambda x: x != '' ,matrix_str.split(" ")))
     size_list = []
@@ -445,6 +440,11 @@ def displaysetting(latexeq):
     return convertall(latexeq,parsed_list,form_list,eval_list,priority_list,'<','>')
 
 def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range_list=False):
+    if string in paramdict and row in paramdict[string] and return_range_list in paramdict[string][row]:
+        global wasmemorized
+        wasmemorized = True
+        return paramdict[string][row][return_range_list]
+                
     parsed = [i[0] for i in parsed_list[row]]
     loopback = [i[1] for i in parsed_list[row]]
     noparam = [i[2] for i in parsed_list[row]]
@@ -1240,7 +1240,7 @@ def latex2img(latex,x=0.001, y=0.001,size=50,imgsize=None,filename=None):
 
     
 def convertall(string,parsed_list,form_list,eval_list,priority_list,begin,end):
-    global lendict
+    global lendict,paramdict
     parsed_list_len = len(parsed_list)
     for row in range(parsed_list_len):
         string = convert(string,parsed_list,form_list,eval_list,priority_list,begin,end,row,True)
@@ -1248,9 +1248,11 @@ def convertall(string,parsed_list,form_list,eval_list,priority_list,begin,end):
         # print(row,": ",repr(string))
         # print(row,": ", parsed_list[row])
     lendict = {} #lendict 초기화
+    paramdict = {}
     return string
 
 def convert(string,parsed_list,form_list,eval_list,priority_list,begin,end,row,first=False):
+    global wasmemorized
     doeval = eval_list[row]
     str_len = len(string)
     if isinstance(string, list):
@@ -1260,7 +1262,18 @@ def convert(string,parsed_list,form_list,eval_list,priority_list,begin,end,row,f
         return str_list
     i=0
     while i< str_len:
+       
         param_list = getparam_list(string[i:],parsed_list,priority_list,row,begin,end)
+        if wasmemorized:
+            wasmemorized = False
+        else:
+            if string[i:] in paramdict:
+                if row in paramdict[string[i:]]:
+                    paramdict[string[i:]][row][False] = param_list
+                else:
+                    paramdict[string[i:]][row] = { False :param_list}
+            else:
+                paramdict[string[i:]] = {row: {False : param_list}}
         #디버깅 쵝오
         #print(string[i:],"param_list: ",param_list)
         if param_list is not None:
@@ -1269,6 +1282,16 @@ def convert(string,parsed_list,form_list,eval_list,priority_list,begin,end,row,f
                 length = param_list[0]
                 
                 param_list =getparam_list(string[i:],parsed_list,priority_list,ciridx,begin,end,True)
+                if wasmemorized:
+                    wasmemorized = False
+                else:
+                    if string[i:] in paramdict:
+                        if ciridx in paramdict[string[i:]]:
+                            paramdict[string[i:]][ciridx][True] = param_list
+                        else:
+                            paramdict[string[i:]][ciridx] = { True :param_list}
+                    else:
+                        paramdict[string[i:]] = {ciridx: {True : param_list}}
                 if length != param_list[1]:
                     raise MyException("Internal Critical Exception")
                 
@@ -1338,9 +1361,6 @@ def answerconvert(answer):
             if flag:
                 if matrix_flag_dict[name] is False:
                     symb_val_dict[name] = Matrix(symarray(name,matrix_size[name])).subs(ans)
-                    print(symb_val_dict[name])
-                    print(latex(symb_val_dict[name]))
-                    matrix_flag_dict[name] = True
                 else:
                     pass
             else:

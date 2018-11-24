@@ -1,5 +1,5 @@
 from functools import partial
-
+from PIL import ImageGrab
 from PIL import Image
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
@@ -227,8 +227,13 @@ class MathTeacher(object):
 	#PIL IMage를 QPixmap 형으로 바꿈
 	def Image2QPixmap(self,image):
 		return QPixmap.fromImage(ImageQt(image.convert("RGBA")))
-
-
+	
+	# clipboard의 이미지 저장
+	def clip(self):
+		self.clipboard_img = ImageGrab.grabclipboard()
+		self.filename = None
+		self.l2cu()
+		
 	#dialog check handler
 	def dcheck(self):
 		self.my_dialog.close()
@@ -288,6 +293,7 @@ class MathTeacher(object):
 		self.loadImage_ui.btn_back.clicked.connect(self.l2m)
 		self.loadImage_ui.btn_dir.clicked.connect(self.openFileDialog)
 		self.loadImage_ui.btn_next.clicked.connect(self.l2cu)
+		self.loadImage_ui.btn_next3.clicked.connect(self.clip)
 
 	# 풀이화면 UI설정
 	def s(self):
@@ -365,10 +371,10 @@ class MathTeacher(object):
 		if not hasattr(self,'filename'):
 			return
 
-		#pixmap = QPixmap(self.filename[0])
-		#self.MainWindow.pixmap = pixmap.scaled(790, 420, QtCore.Qt.IgnoreAspectRatio)
-		
-		self.MainWindow.pixmap = self.Image2QPixmap(center_align_img(Image.open(self.filename[0]),(785,365)))
+		if self.filename is None:
+			self.MainWindow.pixmap = self.Image2QPixmap(self.clipboard_img)
+		else:
+			self.MainWindow.pixmap = self.Image2QPixmap(center_align_img(Image.open(self.filename[0]),(785,365)))
 		self.changeUI(self.loadImage_ui, self.cutImage_ui)
 		self.cu()
 	
@@ -411,7 +417,7 @@ class MathTeacher(object):
 		self.popup_ui.setupUi(self.my_dialog)
 		self.popup_ui.pushButton.clicked.connect(self.dcheck)
 		self.my_dialog.show()
-		
+	
 		
 	#cutImage -> result
 	def cu2r(self):

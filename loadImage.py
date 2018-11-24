@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtGui import QPixmap
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -67,6 +67,26 @@ class Ui_MainWindow(object):
 "border-image: url(:/icon/next.png);")
         self.btn_next.setText("")
         self.btn_next.setObjectName("btn_next")
+
+
+
+        self.btn_next3 = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_next3.setGeometry(QtCore.QRect(20, 370, 63, 63))
+        self.btn_next3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n")
+        pixmap = QPixmap(".\\resources\\clipboard.png")
+        self.btn_next3.setIcon(QtGui.QIcon(pixmap.scaled(64, 64, QtCore.Qt.IgnoreAspectRatio)))
+        
+        self.btn_next3.setIconSize(QtCore.QSize(64, 64))
+        
+        self.btn_next3.setText("")
+        self.btn_next3.setObjectName("btn_next3")
+
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(20, 430, 100, 30))
+        self.label_2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "")
+        self.label_2.setText("(Clipboard)")
+        self.label_2.setObjectName("label")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
