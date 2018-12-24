@@ -92,13 +92,12 @@ class Ui_Form(object):
 
         self.pushButton = QtWidgets.QPushButton(Form)
         self.pushButton.setGeometry(QtCore.QRect(164, 312, 74, 40))
-        self.pushButton.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.pushButton.setStyleSheet("background-color: rgba(255, 255, 255, 0);\nimage: url(resources/check.png)")
         self.pushButton.setText("")
         self.pushButton.setObjectName("pushButton")
 
-        self.pushButton.setIcon(QtGui.QIcon(".\\resources\\check.png"))
-
-        self.pushButton.setIconSize(QtCore.QSize(60, 40))
+        # self.pushButton.setIcon(QtGui.QIcon("./resources/check.png"))
+        # self.pushButton.setIconSize(QtCore.QSize(60, 40))
         self.frame_4 = QtWidgets.QFrame(Form)
         self.frame_4.setGeometry(QtCore.QRect(98, 196, 265, 35))
         self.frame_4.setStyleSheet("background-color: rgb(0, 0, 0);")

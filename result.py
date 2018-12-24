@@ -46,11 +46,11 @@ class Ui_MainWindow(object):
 
         self.btn_next3 = QtWidgets.QPushButton(self.centralwidget)
         self.btn_next3.setGeometry(QtCore.QRect(10, 384, 63, 63))
-        self.btn_next3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n")
-        pixmap = QPixmap(".\\resources\\keyboard.png")
-        self.btn_next3.setIcon(QtGui.QIcon(pixmap.scaled(64, 64, QtCore.Qt.IgnoreAspectRatio)))
+        self.btn_next3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\nborder-image: url(resources/keyboard.png)")
+        # pixmap = QPixmap("./resources/keyboard.png")
+        # self.btn_next3.setIcon(QtGui.QIcon(pixmap.scaled(64, 64, QtCore.Qt.IgnoreAspectRatio)))
         
-        self.btn_next3.setIconSize(QtCore.QSize(64, 64))
+        # self.btn_next3.setIconSize(QtCore.QSize(64, 64))
         
         self.btn_next3.setText("")
         self.btn_next3.setObjectName("btn_next3")

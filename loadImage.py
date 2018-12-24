@@ -21,15 +21,26 @@ class Ui_MainWindow(object):
 "font: 75 18pt \"Arial\";\n"
 "color: rgb(0, 0, 0);\n"
 "")
+
+
+
         self.lbl_title.setTextFormat(QtCore.Qt.PlainText)
         self.lbl_title.setAlignment(QtCore.Qt.AlignCenter)
         self.lbl_title.setObjectName("lbl_title")
+
+
+
+
         self.btn_back = QtWidgets.QPushButton(self.centralwidget)
         self.btn_back.setGeometry(QtCore.QRect(1, 1, 49, 49))
         self.btn_back.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/icon/back_arrow.png);")
+"border-image: url(:/icon/back_arrow.png);")
         self.btn_back.setText("")
         self.btn_back.setObjectName("btn_back")
+
+
+
+
         self.lbl_edit = QtWidgets.QLabel(self.centralwidget)
         self.lbl_edit.setGeometry(QtCore.QRect(745, 1, 49, 49))
         self.lbl_edit.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
@@ -61,6 +72,9 @@ class Ui_MainWindow(object):
 "")
         self.label.setText("")
         self.label.setObjectName("label")
+
+
+
         self.btn_next = QtWidgets.QPushButton(self.centralwidget)
         self.btn_next.setGeometry(QtCore.QRect(750, 390, 49, 49))
         self.btn_next.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
@@ -72,11 +86,12 @@ class Ui_MainWindow(object):
 
         self.btn_next3 = QtWidgets.QPushButton(self.centralwidget)
         self.btn_next3.setGeometry(QtCore.QRect(20, 370, 63, 63))
-        self.btn_next3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n")
-        pixmap = QPixmap(".\\resources\\clipboard.png")
-        self.btn_next3.setIcon(QtGui.QIcon(pixmap.scaled(64, 64, QtCore.Qt.IgnoreAspectRatio)))
+        self.btn_next3.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
+"background-position:center center; background-repeat: no-repeat;background-image: url(resources/clipboard.png)")
+        # pixmap = QPixmap("./resources/clipboard.png")
+        # self.btn_next3.setIcon(QtGui.QIcon(pixmap.scaled(64, 64, QtCore.Qt.IgnoreAspectRatio)))
         
-        self.btn_next3.setIconSize(QtCore.QSize(64, 64))
+        # self.btn_next3.setIconSize(QtCore.QSize(64, 64))
         
         self.btn_next3.setText("")
         self.btn_next3.setObjectName("btn_next3")

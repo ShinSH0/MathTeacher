@@ -39,7 +39,7 @@ class MyWindow(QtWidgets.QMainWindow):
 		self.by = -10
 		self.mode = 0
 		self.RubberBand = 0
-
+		
 		# Toggle : 마우스 클릭 플래그
 		# paint : 그림판 화면 (들어왔는지 여부) 플래그
 		# edit : 사진 수정 화면 (들어왔는지 여부) 플래그
@@ -163,13 +163,17 @@ class MyWindow(QtWidgets.QMainWindow):
 			
 		
 	def save(self):	
+		print(MT.filename)
+		currentQRect = ( self.RubberBand.geometry().adjusted(-5,-80,-5,-80) ) if not isinstance(self.RubberBand,int) else QtCore.QRect(0, 0, 800, 400)
 		
-		currentQRect = self.RubberBand.geometry() if not isinstance(self.RubberBand,int) else QtCore.QRect(0, 0, 800, 400)
+
+		self.RubberBand = 0
 		cropQPixmap = self.pixmap.copy(currentQRect)
 		cropQPixmap.save('output.png')
 
 
 # 사실상 메인함수
+
 class MathTeacher(object):
 	
 	def init(self):
@@ -197,7 +201,6 @@ class MathTeacher(object):
 		self.getImage_ui.setupUi(self.MainWindow)
 		self.MainWindow.show()
 		
-	
 		self.m()
 
 		sys.exit(self.app.exec_())
@@ -218,7 +221,6 @@ class MathTeacher(object):
 		self.getImage_ui.btn_edit.clicked.connect(self.m2e)
 		self.getImage_ui.btn_load.clicked.connect(self.m2l)
 		self.getImage_ui.btn_type.clicked.connect(self.m2t)
-
 		self.MainWindow.paint = 0
 		self.MainWindow.edit = 0
 		self.MainWindow.frame = 0
@@ -231,6 +233,8 @@ class MathTeacher(object):
 	# clipboard의 이미지 저장
 	def clip(self):
 		self.clipboard_img = ImageGrab.grabclipboard()
+		
+		
 		self.filename = None
 		self.l2cu()
 		
@@ -240,6 +244,7 @@ class MathTeacher(object):
 
 	#dialog close event
 	def dclose(self,evnt):
+		f = open("process.txt","w")
 		self.complex = self.popup_ui.lineEdit.text()
 		self.matrix = self.popup_ui.lineEdit_2.text()
 		self.function = self.popup_ui.lineEdit_3.text()
@@ -248,12 +253,13 @@ class MathTeacher(object):
 		self.parsed_list,self.form_list,self.eval_list,self.priority_list = init(self.begin,self.end,"setting.txt",self.symbs)
 		try:
 			#latex를 sympyform으로 변환
+		
+			f.write("LaTeX : "+self.latex+'\n')
 			self.sympyform = convertall(self.latex,self.parsed_list,self.form_list,self.eval_list,self.priority_list,self.begin,self.end)
 			#sympyform을 해석함
-			
-			print("Equation: ",self.sympyform)
+			f.write("SympyForm : "+self.sympyform+'\n')
 			self.interpreted = interpret(self.sympyform)
-			print("Interpreted: ",self.interpreted)
+			f.write("Interpreted : "+self.interpreted+'\n')
 			#해석한 것을 이미지로 만듦
 			
 			self.solved_img = latex2img(self.interpreted,imgsize= (785,365))
@@ -274,7 +280,6 @@ class MathTeacher(object):
 		self.editImage_ui.btn_next.clicked.connect(self.e2r)
 		self.editImage_ui.btn_pen.clicked.connect(partial(self.switchTool, 0))
 		self.editImage_ui.btn_erase.clicked.connect(partial(self.switchTool, 1))
-
 		self.MainWindow.mode = 0
 		self.MainWindow.paint = 1
 		self.MainWindow.frame = self.editImage_ui.lbl_frame
@@ -298,8 +303,6 @@ class MathTeacher(object):
 	# 풀이화면 UI설정
 	def s(self):
 		self.solved_ui.btn_next.clicked.connect(self.s2m)
-	
-		
 		self.solved_ui.lbl_frame.setPixmap(self.Image2QPixmap(self.solved_img))
 
 	# 직접입력 UI 설정
@@ -372,7 +375,7 @@ class MathTeacher(object):
 			return
 
 		if self.filename is None:
-			self.MainWindow.pixmap = self.Image2QPixmap(self.clipboard_img)
+			self.MainWindow.pixmap = self.Image2QPixmap(center_align_img(self.clipboard_img,(785,365)))
 		else:
 			self.MainWindow.pixmap = self.Image2QPixmap(center_align_img(Image.open(self.filename[0]),(785,365)))
 		self.changeUI(self.loadImage_ui, self.cutImage_ui)

@@ -63,7 +63,7 @@ class Ui_MainWindow(object):
         self.btn_back = QtWidgets.QPushButton(self.centralwidget)
         self.btn_back.setGeometry(QtCore.QRect(1, 1, 49, 49))
         self.btn_back.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/icon/back_arrow.png);")
+"border-image: url(:/icon/back_arrow.png);")
         self.btn_back.setText("")
         self.btn_back.setObjectName("btn_back")
         self.lbl_edit = QtWidgets.QLabel(self.centralwidget)
@@ -97,14 +97,14 @@ class Ui_MainWindow(object):
         for i in range(len(self.folders)):
             button = QtWidgets.QPushButton(self.centralwidget)
             button.setGeometry(QtCore.QRect(x+(ascX*(i%8)), y+(ascY*int(i/8)), width, height))
-            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);background-position:center center; background-repeat: no-repeat;"+"background-image: url(image/%s/0.png)"%(self.folders[i]))
             button.setText("")
             button.setObjectName("btn_%d"%(i))
 
-            pixmap = QPixmap(".\\image\\%s\\0.png"%(self.folders[i]))
-            button.setIcon(QtGui.QIcon(pixmap.scaled(50, 50, QtCore.Qt.IgnoreAspectRatio)))
+            # pixmap = QPixmap("./image/%s/0.png"%(self.folders[i]))
+            # button.setIcon(QtGui.QIcon(pixmap.scaled(50, 50, QtCore.Qt.IgnoreAspectRatio)))
 
-            button.setIconSize(QtCore.QSize(50, 50))
+            # button.setIconSize(QtCore.QSize(50, 50))
 
             button.clicked.connect(partial(self.changePanel, self.folders[i]))
 
@@ -174,15 +174,15 @@ class Ui_MainWindow(object):
                         
                         # 버튼 만듬
                         button = QtWidgets.QPushButton(panel)
-                        button.setGeometry(QtCore.QRect(x, y, 85, 50))
-                        button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                        button.setGeometry(QtCore.QRect(x, y-5, 85, 60))
+                        button.setStyleSheet("background-color: rgba(255, 255, 255, 0);background-position:center center; background-repeat: no-repeat;"+"background-position:center center; background-repeat: no-repeat;background-image: url(image/%s/%d.png)"%(stri, i2*10+i3))
                         button.setText("")
                         button.setObjectName("btn_%s_%d"%(stri,i2*10+i3))
 
                         # 이미지 받아옴
-                        pixmap = QPixmap(".\\image\\%s\\%d.png"%(stri, i2*10+i3))
-                        button.setIcon(QtGui.QIcon(pixmap.scaled(50, 50, QtCore.Qt.IgnoreAspectRatio)))
-                        button.setIconSize(QtCore.QSize(45, 45))
+                        # pixmap = QPixmap("./image/%s/%d.png"%(stri, i2*10+i3))
+                        # button.setIcon(QtGui.QIcon(pixmap.scaled(50, 50, QtCore.Qt.IgnoreAspectRatio)))
+                        # button.setIconSize(QtCore.QSize(45, 45))
 
                         button.clicked.connect(partial(self.addText, stri, i2 * 10 + i3))
 
@@ -195,10 +195,10 @@ class Ui_MainWindow(object):
                         if i2 == 0:
                             button = QtWidgets.QPushButton(panel)
                             button.setGeometry(QtCore.QRect(150, 280, 25, 15))
-                            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);\nbackground-position:center center; background-repeat: no-repeat;background-image: url(resources/n.png)")
                             button.setText("")
-                            button.setIcon(QtGui.QIcon(".\\resources\\n.png"))
-                            button.setIconSize(QtCore.QSize(15, 12))
+                           # button.setIcon(QtGui.QIcon("./resources/n.png"))
+                           # button.setIconSize(QtCore.QSize(15, 12))
 
                             button.clicked.connect(partial(self.changePage, 1))
 
@@ -207,10 +207,10 @@ class Ui_MainWindow(object):
                         elif i2 == page-1:
                             button = QtWidgets.QPushButton(panel)
                             button.setGeometry(QtCore.QRect(5, 280, 25, 15))
-                            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);\nbackground-position:center center; background-repeat: no-repeat;background-image: url(resources/b.png)")
                             button.setText("")
-                            button.setIcon(QtGui.QIcon(".\\resources\\b.png"))
-                            button.setIconSize(QtCore.QSize(15, 12))
+                            # button.setIcon(QtGui.QIcon("./resources/b.png"))
+                            # button.setIconSize(QtCore.QSize(15, 12))
 
                             button.clicked.connect(partial(self.changePage, -1))
 
@@ -219,17 +219,17 @@ class Ui_MainWindow(object):
                         else:
                             button = QtWidgets.QPushButton(panel)
                             button.setGeometry(QtCore.QRect(5, 280, 25, 15))
-                            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                            button.setStyleSheet("background-color: rgba(255, 255, 255, 0);\nbackground-position:center center; background-repeat: no-repeat;background-image: url(resources/b.png)")
                             button.setText("")
-                            button.setIcon(QtGui.QIcon(".\\resources\\b.png"))
-                            button.setIconSize(QtCore.QSize(15, 12))
+                            # button.setIcon(QtGui.QIcon("./resources/b.png"))
+                            # button.setIconSize(QtCore.QSize(15, 12))
 
                             button2 = QtWidgets.QPushButton(panel)
                             button2.setGeometry(QtCore.QRect(150, 280, 25, 15))
-                            button2.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+                            button2.setStyleSheet("background-color: rgba(255, 255, 255, 0);\nbackground-position:center center; background-repeat: no-repeat;background-image: url(resources/n.png)")
                             button2.setText("")
-                            button2.setIcon(QtGui.QIcon(".\\resources\\n.png"))
-                            button2.setIconSize(QtCore.QSize(15, 12))
+                            # button2.setIcon(QtGui.QIcon("./resources/n.png"))
+                            # button2.setIconSize(QtCore.QSize(15, 12))
 
                             button.clicked.connect(partial(self.changePage, -1))
                             button2.clicked.connect(partial(self.changePage, 1))

@@ -39,14 +39,13 @@ defaultfunction = ['integrate','limit','sqrt','exp','Sum','Matrix','Prod','Piece
 
 
 defaultmatrix = []
-defaultcomplex = ['e']
+defaultcomplex = ['e',r'\\pi']
 
 alphabet = [chr(i) for i in range(ord('A'), ord('Z')+1)]+[chr(i) for i in range(ord('a'), ord('z')+1)]
 
 triangleseperator = ['\\'+i for i in trianglefunction]
 seperator = ['+','-',',']
 escaped_seperator = []
-
 
 relationals = ['\\<','\\>','=',r'\leq',r'\geq'] # 관계식 종류 leq는 작거나 같음, geq는 크거나 같음이다.
 escaped_relationals = []
@@ -60,9 +59,34 @@ wasmemorized = False
 
 # 커스텀 Exception의 메시지는 에러의 발생원인을 잘 담고 있어서 유지보수가 쉽다.
 class MyException(Exception): 
+    
     def __init__(self, msg):
         self.msg = msg
-def getsymbs(complex_str, matrix_str, function_str):
+
+
+try:
+        
+    app_info = json.loads(open("app_info.json", "r").read())
+except:
+    raise MyException("File Read Error: app_info.json")
+    
+def getsymbs( complex_str, matrix_str, function_str):
+    """팝업 폼에서 입력된 문자열들을 인자로 바아서 Symbol 리스트를 만들어 반환
+    
+    Arguments:
+        complex_str {string} -- Complex 변수 설정 문자열
+        matrix_str {string} -- Matrix 변수 설정 문자열
+        function_str {string} -- Function 변수 설정 문자열
+    
+    Raises:
+        Exception -- [description]
+    
+    Returns:
+        list -- Symbol 리스트
+    """
+
+    
+    
     complex = list(filter( lambda x: x != '' ,complex_str.split(" ")))
     matrix = list(filter( lambda x: x != '' ,matrix_str.split(" ")))
     size_list = []
@@ -100,6 +124,15 @@ def getsymbs(complex_str, matrix_str, function_str):
     return [complex, [name_list,size_list], function]
 
 def getrange(range_list):
+    """Range List를 받아서 모든 Range를 포함하는 최소 Range를 리턴
+    
+    Arguments:
+        range_list {list} -- Range의 List
+    
+    Returns:
+        Range -- 모든 Range를 포함하는 최소 Range
+    """
+
     first = range_list[0]
     last = range_list[-1]
     if isinstance(first,list):
@@ -111,6 +144,17 @@ def getrange(range_list):
 
 
 def replace_parts(string, range_list, str_list):
+    """인자로 받은 Range List로 string을 여러 부분으로 쪼갠 뒤 str_list로 재조합하여 만든 문자열을 반환 
+    
+    Arguments:
+        string {string} -- 임의의 문자열
+        range_list {list} -- Range 리스트
+        str_list {list} -- 문자열 리스트
+    
+    Returns:
+        string -- 재조합된 문자열
+    """
+
     replaced_str = []
     i=0
     for _range, _str in zip(range_list, str_list):
@@ -135,6 +179,22 @@ def replace_parts(string, range_list, str_list):
 #ex) getidx("ab", ['a','b']) 는 0을 리턴한다
 #ex) getidx("ab", ['c'])는 None을 리턴한다.  
 def getidx(string, str_list,begin='',end=''):
+    """string의 첫 번째를 이루는 문자열이 str_list의 몇 번째 원소인지를 반환한다.
+    
+    Arguments:
+        string {string} -- 임의의 문자열
+        str_list {list} -- 문자열 리스트
+    
+    Keyword Arguments:
+        begin {str} -- begin 문자열 (default: {''})
+        end {str} -- end 문자열 (default: {''})
+    
+    Returns:
+        int -- None 또는 인덱스
+    """
+
+    
+    
     if isinstance(str_list, str):
         str_list = [str_list]
 
@@ -150,6 +210,7 @@ def getidx(string, str_list,begin='',end=''):
         elif string[:len(str_list[idx])] == str_list[idx]:
             return (idx, len(str_list[idx]))
     return (None,None)
+
 
 def getlen(string, parsed_list,priority_list, row, begin,end,debugflag = False):
     if string in lendict:
@@ -171,6 +232,7 @@ def getlen(string, parsed_list,priority_list, row, begin,end,debugflag = False):
     notNone = 1
     beforeback = None
     wasjumped = False
+    repeat_flag= False
     jumprange = range(0)
     prev_flag  =False
     next_flag = False
@@ -325,10 +387,26 @@ def getlen(string, parsed_list,priority_list, row, begin,end,debugflag = False):
                     if i == length : 
                         # 낮지 않은 우선순위 일경우에만 lastlength를 업데이트함.
                         lastlength = i
+                    if not getbool(times[col],cnt[col],begin,end) and not gethasparam(noparam,col,waslooped,repeat_flag,beforeback):
+                        ##생략될 수 없으며, 인자를 가지고 있지 않는 것들
+                        #print(669)
+                        if flag_1:
+                            lendict[string][row] = lastlength
+                        elif flag_2:
+                            lendict[string] = {row: lastlength}
+                        return lastlength
                     prev = -1
                 else:
                     if idx+1 == len(parsed_list)+1:
                         if next_flag:
+                            if not getbool(times[col],cnt[col],begin,end) and not gethasparam(noparam,col,waslooped,repeat_flag,beforeback):
+                                ##생략될 수 없으며, 인자를 가지고 있지 않는 것들
+                                #print(669)
+                                if flag_1:
+                                    lendict[string][row] = lastlength
+                                elif flag_2:
+                                    lendict[string] = {row: lastlength}
+                                return lastlength
                             prev = -1
                             i+=1
                         else:
@@ -366,6 +444,14 @@ def getlen(string, parsed_list,priority_list, row, begin,end,debugflag = False):
                     next_flag=True
                     continue
                 else:
+                    if not getbool(times[col],cnt[col],begin,end) and not gethasparam(noparam,col,waslooped,repeat_flag,beforeback):
+                        ##생략될 수 없으며, 인자를 가지고 있지 않는 것들
+                        #print(669)
+                        if flag_1:
+                            lendict[string][row] = lastlength
+                        elif flag_2:
+                            lendict[string] = {row: lastlength}
+                        return lastlength
                     i+=1
                     prev = -1
                 prev_flag= False
@@ -374,6 +460,14 @@ def getlen(string, parsed_list,priority_list, row, begin,end,debugflag = False):
                 next_flag = True
                 continue
             else:
+                if not getbool(times[col],cnt[col],begin,end) and not gethasparam(noparam,col,waslooped,repeat_flag,beforeback):
+                    ##생략될 수 없으며, 인자를 가지고 있지 않는 것들
+                    #print(669)
+                    if flag_1:
+                        lendict[string][row] = lastlength
+                    elif flag_2:
+                        lendict[string] = {row: lastlength}
+                    return lastlength
                 idx,idx_len = getidx(string[i:], [begin,end,'\\'+begin,'\\'+end,'\\\\','\\'],begin,end)
                 prev = -1
                 if idx is None:
@@ -424,6 +518,20 @@ def getlen(string, parsed_list,priority_list, row, begin,end,debugflag = False):
         lendict[string] = {row: lastlength}
     return lastlength
 def repairparam(param_list, loopback, startidx, firstback, lastinsertidx, col):
+    """param_list를 다듬어서 반환
+    
+    Arguments:
+        param_list {list} -- param 리스트
+        loopback {int} -- 루프 시 돌아가는 인덱스
+        startidx {int} -- 처음으로 추가한 원소의 인덱스
+        firstback {bool} -- 처음 돌아왔는지 여부
+        lastinsertidx {int} -- 마지막으로 추가한 원소의 인덱스
+        col {int} -- 현재 칼럼
+    
+    Returns:
+        list -- 다듬어진 param_list
+    """
+
     ii = startidx[col]
     if ii is None:
         ii = lastinsertidx
@@ -435,6 +543,22 @@ def repairparam(param_list, loopback, startidx, firstback, lastinsertidx, col):
         return param_list[:ii+1]
 
 
+def gethasparam(noparam,col,waslooped,repeat_flag,beforeback,default=False):
+    if default:
+        if isinstance(noparam[col],list):
+                return False if noparam[col][0] else True
+        else:
+            return False if noparam[col] else True
+    if waslooped:
+        if repeat_flag:
+            return False
+        else:
+            return False if noparam[col][1][beforeback] else True
+    else:
+        if isinstance(noparam[col],list):
+            return False if noparam[col][0] else True
+        else:
+            return False if noparam[col] else True
 def displaysetting(latexeq):
     parsed_list,form_list,eval_list,priority_list = init('<','>',"displaysetting.txt",[[],[[],[]],[]])
     return convertall(latexeq,parsed_list,form_list,eval_list,priority_list,'<','>')
@@ -444,11 +568,13 @@ def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range
         global wasmemorized
         wasmemorized = True
         return paramdict[string][row][return_range_list]
-                
+
+    
     parsed = [i[0] for i in parsed_list[row]]
     loopback = [i[1] for i in parsed_list[row]]
     noparam = [i[2] for i in parsed_list[row]]
     times = [i[3] for i in parsed_list[row]]
+        
     loopback_len = len(loopback)
     cnt = [0 for i in range(loopback_len)]
     range_list = []
@@ -462,6 +588,7 @@ def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range
     lastlength = None
     prev_flag = False
     next_flag = False
+    repeat_flag = False
     prev_idx = None
     prev_idx_len = None
     jumprange = range(0)
@@ -645,15 +772,24 @@ def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range
                 length = getlen(string[i:],parsed_list,priority_list,ciridx,begin,end)
                 
                 if length is not None and priority_list[ciridx] <= priority_list[row]:
+
                     i+= length
                     if i == length : 
                         # 낮지 않은 우선순위 일경우에만 lastlength를 업데이트함.
                         lastlength = (i,ciridx)
+                    if not getbool(times[col],cnt[col],begin,end) and not gethasparam(noparam,col,waslooped,repeat_flag,beforeback):
+                        ##생략될 수 없으며, 인자를 가지고 있지 않는 것들
+                        #print(669)
+                        return lastlength
                     prev = -1
                 else:
                     if idx+1 == len(parsed_list)+1:
                         if next_flag:
                             prev = -1
+                            if not getbool(times[col],cnt[col],begin,end) and not gethasparam(noparam,col,waslooped,repeat_flag,beforeback):
+                                ##생략될 수 없으며, 인자를 가지고 있지 않는 것들
+                                #print(678)
+                                return lastlength
                             i+=1
                         else:
                             prev_flag=True
@@ -690,7 +826,12 @@ def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range
                     continue
                     
                 else:
+                    if not getbool(times[col],cnt[col],begin,end) and not gethasparam(noparam,col,waslooped,repeat_flag,beforeback):
+                        ##생략될 수 없으며, 인자를 가지고 있지 않는 것들
+                        #print(719)
+                        return lastlength
                     prev = -1
+                  
                     i+=1
                 prev_flag = False
             elif prev_flag:
@@ -698,6 +839,10 @@ def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range
                 next_flag = True
                 continue
             else:
+                if not getbool(times[col],cnt[col],begin,end) and not gethasparam(noparam,col,waslooped,repeat_flag,beforeback):
+                    ##생략될 수 없으며, 인자를 가지고 있지 않는 것들
+                    #print(731)
+                    return lastlength
                 prev = -1
                 idx,idx_len = getidx(string[i:], [begin,end,'\\'+begin,'\\'+end,'\\\\','\\'])
                 if idx is None:
@@ -764,6 +909,19 @@ def getparam_list(string, parsed_list, priority_list,row, begin,end,return_range
 
 
 def escape(string,esc_list,stay=[]):
+    """문자열에 esc_list안의 문자열이 이스케이프 되지 않은 채 포함된 경우 escape시켜서 반환
+    
+    Arguments:
+        string {string} -- 임의의 문자열
+        esc_list {list} -- 문자열 리스트
+    
+    Keyword Arguments:
+        stay {list} -- escape시키고 싶지 않은 esc_list의 일부분 (default: {[]})
+    
+    Returns:
+        string -- escape된 문자열
+    """
+
     i=0
     str_len = len(string)
     str_list = ['\\'+esc for esc in esc_list]+['\\\\','\\']
@@ -785,6 +943,21 @@ def escape(string,esc_list,stay=[]):
 
 
 def find_escaped(string, target,begin='',end='',esc=''):
+    """문자열에서 escape 된 target을 찾고 존재 여부에 따라 None 또는 인덱스를 반환
+    
+    Arguments:
+        string {string} -- 임의의 문자열
+        target {string} -- 찾을 문자열
+    
+    Keyword Arguments:
+        begin {str} -- begin 문자열 (default: {''})
+        end {str} -- end 문자열 (default: {''})
+        esc {str} -- esc 문자열 (default: {''})
+
+    Returns:
+        int -- None 또는 인덱스
+    """
+
     i=0
     if esc=='':
         esc= target
@@ -816,9 +989,20 @@ def find_escaped(string, target,begin='',end='',esc=''):
     return None
 
 def getcode(string,begin,end,esc=''):
+    """문자열에 해당하는 코드를 반환
+    
+    Arguments:
+        string {string} -- 임의의 문자열
+        begin {string} -- begin 문자열
+        end {string} -- end 문자열
+    
+    Keyword Arguments:
+        esc {str} -- escape 문자열 (default: {''})
+    
+    Returns:
+        int -- 문자열에 해당하는 코드
     """
-    :return: 문자 코드를 리턴, 문자 코드를 얻을 수 없는 경우 return None
-    """
+
     code = -1
     str_len = len(string)
     i=0
@@ -846,15 +1030,34 @@ def getcode(string,begin,end,esc=''):
             return code        
         
 def split_escaped(string, pivot):
+    """pivot을 기준으로 문자열을 나누어서 쪼개진 문자열들의 리스트를 반환
+    
+    Arguments:
+        string {string} -- 임의의 문자열
+        pivot {string} -- 기준 문자열
+    
+    Returns:
+        list -- 쪼개진 문자열들의 리스트
+    """
+
     idx = find_escaped(string, pivot)
     if idx is None:
         return [string]
     return [string[:idx]] + split_escaped(string[idx+len(pivot):],pivot)
 
 def getbool(times,x,begin,end):
+    """x 값이 times의 사잇값인지 여부를 반환
+    
+    Arguments:
+        times {list} -- 횟수 리스트
+        x {int} -- 횟수
+        begin {string} -- begin 문자열
+        end {string} -- end 문자열
+    
+    Returns:
+        bool -- 사잇값인지 여부
     """
-    :times: times는 정수만 가지는 리스트여야 한다. 
-    """
+
     if isinstance(x,str):
         x= ord(x[0])
     if times is None:
@@ -869,6 +1072,17 @@ def getbool(times,x,begin,end):
         raise MyException("Times Size Must Be Less Than 3")        
 
 def findpair_escaped(string, left,right):
+    """left로 시작하는 문자열에서 그 left와 짝을 이루는 right의 위치를 반환
+    
+    Arguments:
+        string {string} -- left로 시작하는 문자열
+        left {string} -- left 문자열
+        right {right} -- right 문자열
+    
+    Returns:
+        int -- None 또는 인덱스
+    """
+
     
     i=0
     str_len = len(string)
@@ -933,8 +1147,7 @@ def pair_replace(string, left, right, new_left, new_right,begin,end):
     :param new_right: '}' 같이 new_left와 짝을 이루고 right와 교체될 문자열
     :param begin: '\\[' 같이 end와 짝을 이루는 문자열
     :param end: '\\] 같이 begin과 짝을 이루는 문자열
-    :param begin_end: begin과 end사이는 건너 뛸 지 여부
-    :return: 오류 발생 시 MyExcepion Raise, 그 이외에는 left를 new_left로 right를 new_right로 교체한 문자열을 반환한다.
+    :return: left를 new_left로 right를 new_right로 교체한 문자열을 반환한다.
     """
     #========================
     left_len = len(left)
@@ -961,7 +1174,18 @@ def pair_replace(string, left, right, new_left, new_right,begin,end):
 
         
 def replace_escaped(string, esc_list,new_list):
+    """문자열에 포함된 이스케이프된 esc_list의 원소를 대응하는 new_list의 원소로 교체하여 재구성한 문자열을 반환
     
+    Arguments:
+        string {string} -- 임의의 문자열
+        esc_list {list} -- 이스케이프 문자열
+        new_list {list} -- 교체될 문자열 
+    
+    Returns:
+        string -- 재구성된 문자열
+    """
+
+
     i=0
     str_len = len(string)
     while i< str_len:
@@ -975,6 +1199,18 @@ def replace_escaped(string, esc_list,new_list):
             i+=1
     return string
 def escape_parsed(parsed,param,begin,end):
+    """parsed를 이스케이프 해서 반환
+    
+    Arguments:
+        parsed {list} -- parsed
+        param {string} -- param 문자열
+        begin {string} -- begin 문자열
+        end {string} -- end 문자열
+    
+    Returns:
+        list -- 이스케이프된 parsed
+    """
+
     str_list = [param,begin,end,'\\']
     escaped_parsed = []
     for pars in parsed:
@@ -996,6 +1232,19 @@ def escape_parsed(parsed,param,begin,end):
     return escaped_parsed
 
 def parse(string,param,parsed,wasparam, begin, end):
+    """문자열을 파싱하여 parsed를 뽑아냄
+    
+    Arguments:
+        string {string} -- 임의의 문자열
+        param {string} -- param 문자열
+        parsed {list} -- 파싱 중인 문자열
+        wasparam {bool} -- 이전이 param 문자열인지 여부
+        begin {string} -- begin 문자열
+        end {string} -- end 문자열
+    
+    Returns:
+        list -- parsed
+    """
 
     flag= True if wasparam is None else False
     str_list = [begin, '\'', '\'', '...', end]
@@ -1189,18 +1438,30 @@ def parse(string,param,parsed,wasparam, begin, end):
     return parsed, wasparam
         
 
-def img2latex(filename):
+def img2latex(filename, apifn = "account.json"):
+    """filename의 url을 가진 이미지를 MathPix API를 사용하여 LaTeX 문자열로 변환
+    
+    Arguments:
+        filename {string} -- 이미지 파일 경로
+    
+    Raises:
+        MyException -- [description]
+    
+    Returns:
+        string -- LaTeX문자열
+    """
+
     #약 0.6초 정도 소모됨
-    global maximum_call, img2latex_call
-    if maximum_call == img2latex_call:
-        print("Maximum Call")
-        raise MyException("Dont Call img2latex More Than "+str(maximum_call))
-    img2latex_call+=1
+    # global maximum_call, img2latex_call
+    # if maximum_call == img2latex_call:
+    #     print("Maximum Call")
+    #     raise MyException("Dont Call img2latex More Than "+str(maximum_call))
+    # img2latex_call+=1
     file_path = filename
     image_uri = "data:image/jpg;base64," + str(base64.b64encode(open(file_path, "rb").read()))[2:-1]
     r = requests.post("https://api.mathpix.com/v3/latex",
         data=json.dumps({'src': image_uri, 'ocr' : ['math','text']}),
-        headers={"app_id": "msjang4_dgsw_hs_kr", "app_key": "caacac60603c51823275", 
+        headers={"app_id": app_info['app_id'], "app_key":app_info['app_key'], 
                 "Content-type": "application/json"})
     _latex= json.loads(r.text)['latex']
     f= open("log.txt","a")
@@ -1210,6 +1471,16 @@ def img2latex(filename):
         return r'\text{Failed\: To\:  Detect}'
     return _latex
 def center_align_img(img,size):
+    """이미지를 사이즈만큼 resize시켜 반환
+    
+    Arguments:
+        img {PIL.Image} -- resize시킬 이미지
+        size {tuple} -- (너비, 높이)
+    
+    Returns:
+        PIL.Image -- resize된 이미지
+    """
+
     if size is None:
         size = (50,50)
     img.thumbnail(size, Image.ANTIALIAS)
@@ -1217,29 +1488,62 @@ def center_align_img(img,size):
     layer.paste(img, tuple(map(lambda x: (x[0]-x[1])//2, zip(size, img.size))))
     return layer
 def latex2img(latex,x=0.001, y=0.001,size=50,imgsize=None,filename=None):
-    #이함수는 맨처음 실행됐을때만 겁나게 느리다. 이유는 모르겠다.
-    fig = plt.figure()
-    plt.text(x, y, r"$%s$" % latex, fontsize = size)
-    fig.patch.set_facecolor('white')
-    plt.axis('off')
-    plt.tight_layout()
+    """LaTeX 문자열을 matplotlib를 이용하여 이미지로 변환
+    
+    Arguments:
+        latex {string} -- LaTeX 문자열
+    
+    Keyword Arguments:
+        x {float} -- x 좌표 (default: {0.001})
+        y {float} -- y 좌표 (default: {0.001})
+        size {int} -- Font 크기 (default: {50})
+        imgsize {tuple} -- 원하는 이미지 사이즈 (default: {None})
+        filename {string} -- 저장 파일 경로 (default: {None})
+    
+    Returns:
+        PIL.Image -- 이미지 객체
+    """
 
-    with io.BytesIO() as png_buf:
-        plt.savefig(png_buf, bbox_inches='tight', pad_inches=0) #요거 1초 정도
-        plt.close(fig)
-        png_buf.seek(0)
+    #이함수는 맨처음 실행됐을때만 겁나게 느리다. 이유는 모르겠다.
+    fig = plt.figure()  # plot하나를 생성
+    plt.text(x, y, r"$%s$" % latex, fontsize = size)  # plot위에 LaTeX 라벨 하나를 올림
+    fig.patch.set_facecolor('white') # 전면 색상을 white로 설정 (= 배경을 white로 설정)
+    plt.axis('off') # x축 y축을 숨김
+    plt.tight_layout() # 겹치는 글자가 없도록 함
+
+    with io.BytesIO() as png_buf: # 바이트를 저장할 수 있는 png_buf 버퍼를 하나 만듦
+        plt.savefig(png_buf, bbox_inches='tight', pad_inches=0) #plot을 이미지로 변환하여 png_buf 버퍼에 담음
+        plt.close(fig) #plot을 닫음
+        #===================== 여기서 부터
+        png_buf.seek(0) 
         image = Image.open(png_buf)
         image.load()
         inverted_image = ImageOps.invert(image.convert("RGB"))
         cropped = image.crop(inverted_image.getbbox())
+        #====================== 여까지는 white부분(불필요한 부분)을 잘라내는 역할을 함, 복붙한거라 자세히 모름
         if imgsize is not None:
-            cropped = center_align_img(cropped,imgsize)
+            cropped = center_align_img(cropped,imgsize) # imgsize로 이미지를 중앙정렬함
         if filename is None:
             return cropped
-        cropped.save(filename)
+        cropped.save(filename) #filename으로 이미지를 저장함
 
     
 def convertall(string,parsed_list,form_list,eval_list,priority_list,begin,end):
+    """LaTeX를 SympyForm으로 변환하여 반환
+    
+    Arguments:
+        string {string} -- LaTeX 문자열
+        parsed_list {list} -- parsed 리스트
+        form_list {list} -- form 리스트
+        eval_list {list} -- eval 여부 리스트
+        priority_list {list} -- 우선순위 리스트
+        begin {string} -- begin 문자열
+        end {string} -- end 문자열
+    
+    Returns:
+        string -- SympyForm
+    """
+
     global lendict,paramdict
     parsed_list_len = len(parsed_list)
     for row in range(parsed_list_len):
@@ -1252,6 +1556,29 @@ def convertall(string,parsed_list,form_list,eval_list,priority_list,begin,end):
     return string
 
 def convert(string,parsed_list,form_list,eval_list,priority_list,begin,end,row,first=False):
+    """row번째 해당하는 LaTeX -> SympyForm 변환을 실행
+    
+    Arguments:
+        string {string} -- LaTeX 문자열
+        parsed_list {list} -- parsed 리스트
+        form_list {list} -- form 리스트
+        eval_list {list} -- eval 여부 리스트
+        priority_list {list} -- 우선순위 리스트
+        begin {string} -- begin 문자열
+        end {string} -- end 문자열
+        row {int} -- 인덱스
+    
+    Keyword Arguments:
+        first {bool} -- 첫 실행 여부 (default: {False})
+    
+    Raises:
+        MyException -- [description]
+        MyException -- [description]
+    
+    Returns:
+        [type] -- [description]
+    """
+
     global wasmemorized
     doeval = eval_list[row]
     str_len = len(string)
@@ -1332,6 +1659,16 @@ def convert(string,parsed_list,form_list,eval_list,priority_list,begin,end,row,f
     return string
 
 def wannaconvert(wanna,symbs):
+    """wanna 문자열을 변환시켜 반환
+    
+    Arguments:
+        wanna {string} -- wanna 문자열
+        symbs {list} -- Symbol 리스트
+    
+    Returns:
+        string -- 변환된 wanna
+    """
+
     symbs = symbs +[reduce(operator.add,symbs)]+ [relationals]+[argleft]+[argright]+[seperator]+[alphabet]
     str_list = ['Complex','Matrix','Function','Unknown','Relational','Argleft','Argright','Seperator','Alphabet']
     for i in range(len(str_list)):
@@ -1339,6 +1676,15 @@ def wannaconvert(wanna,symbs):
     return wanna
 
 def answerconvert(answer):
+    """answer 문자열을 변환시켜 반환
+    
+    Arguments:
+        answer {string} -- answer 문자열
+    
+    Returns:
+        string -- 변환된 answer
+    """
+
     str_list = []
     str_list.append(r'\left. \begin{array} { l }')
     eqr = []
@@ -1375,8 +1721,20 @@ def answerconvert(answer):
     return ''.join(str_list)
 
 def interpret(sympyform, func = 0):
+    """SympyForm을 풀이하여서 LaTeX로 된 답을 반환함
+    
+    Arguments:
+        sympyform {string} -- SympyForm 문자열
+    
+    Keyword Arguments:
+        func {int} -- func 종류 (default: {0})
+    
+    Returns:
+        string -- LaTeX로 된 답
+    """
+
     global eqr
-    exec('eqr = '+sympyform,globals())
+    exec('eqr = '+sympyform.replace("\\",""),globals())
     if isinstance(eqr,tuple):
         eqr_system = []
         for elem in eqr:
@@ -1430,7 +1788,24 @@ def interpret(sympyform, func = 0):
     return answer
 
 def init(begin,end,filename,symbs):
-    global begin_end_parsed,seperator,escaped_seperator,escaped_relationals, matrix_size,matrix_elems_dict,matrix_name_list
+    """begin 문자열과 end 문자열, Symbol과 parsed 리스트를 초기화 합니다
+    
+    Arguments:
+        begin {[type]} -- [description]
+        end {[type]} -- [description]
+        filename {[type]} -- [description]
+        symbs {[type]} -- [description]
+    
+    Raises:
+        MyException -- [description]
+        MyException -- [description]
+    
+    Returns:
+        [type] -- [description]
+    """
+
+    global begin_end_parsed,seperator,escaped_seperator,escaped_relationals, matrix_size,matrix_elems_dict,matrix_name_list, app_info
+    
     begin_end_parsed = []
 
     #seperator 관련 변수 초기화
@@ -1449,7 +1824,7 @@ def init(begin,end,filename,symbs):
     begin_end_parsed = [[[begin,None,True,None],[end,None,False,None]]]
     f = open(filename,'r',encoding='utf-8') 
     if symbs[0] != []:
-        exec(','.join(symbs[0]) + '='+ 'symbols(\''+' '.join(symbs[0])+'\')',globals())
+        exec(','.join(symbs[0]).replace("\\","") + '='+ 'symbols(r\''+' '.join(symbs[0])+'\')',globals())
     if symbs[1][0] != [] and symbs[1][1] != []:
         for name, size in zip(symbs[1][0],symbs[1][1]):
             matrix_name_list.append(name)
@@ -1457,7 +1832,7 @@ def init(begin,end,filename,symbs):
             matrix_elems_dict[name] = reduce(operator.add, [list(i) for i in symarray(name,size)])
 
     if symbs[2] != []:
-        exec(','.join(symbs[2]) + '='+ 'symbols(\''+' '.join(symbs[2])+'\',cls=Function)',globals())
+        exec(','.join(symbs[2]).replace("\\","") + '='+ 'symbols(r\''+' '.join(symbs[2])+'\',cls=Function)',globals())
     symbs[0] = symbs[0] + defaultcomplex
     symbs[1] = symbs[1][0] + defaultmatrix
     symbs[2] = symbs[2] + defaultfunction

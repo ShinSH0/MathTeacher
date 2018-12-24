@@ -31,7 +31,7 @@ class Ui_MainWindow(object):
         self.btn_back = QtWidgets.QPushButton(self.centralwidget)
         self.btn_back.setGeometry(QtCore.QRect(1, 1, 49, 49))
         self.btn_back.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/icon/back_arrow.png);")
+"border-image: url(:/icon/back_arrow.png);")
         self.btn_back.setText("")
         self.btn_back.setObjectName("btn_back")
         self.lbl_edit = QtWidgets.QLabel(self.centralwidget)

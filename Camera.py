@@ -33,7 +33,7 @@ class Ui_MainWindow(object):
         self.btn_back = QtWidgets.QPushButton(self.centralwidget)
         self.btn_back.setGeometry(QtCore.QRect(1, 1, 49, 49))
         self.btn_back.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/icon/back_arrow.png);")
+"border-image: url(:/icon/back_arrow.png);")
         self.btn_back.setText("")
         self.btn_back.setObjectName("btn_back")
         self.lbl_frame = QtWidgets.QLabel(self.centralwidget)
@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
         self.btn_capture = QtWidgets.QPushButton(self.centralwidget)
         self.btn_capture.setGeometry(QtCore.QRect(375, 400, 50, 50))
         self.btn_capture.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"image: url(:/icon/capture.png);")
+"border-image: url(:/icon/capture.png);")
         self.btn_capture.setText("")
         self.btn_capture.setObjectName("btn_capture")
         self.lbl_cam = QtWidgets.QLabel(self.centralwidget)
